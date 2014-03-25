@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat" >
+
+    <Button
+        android:id="@+id/Markets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Find a Market"
+        android:onClick="viewMarkets" />
+
+    <Button
+        android:id="@+id/Grocery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Grocery List"
+        android:onClick="viewGrocery"/>
+    
+    <Button
+        android:id="@+id/Inventory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Vendor Inventory"
+        android:onClick="viewInventory"/>
+
+
+</LinearLayout>

@@ -1,0 +1,224 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/backrepeat"
+    tools:context=".EditMarket" >
+
+    <EditText
+        android:id="@+id/marketName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enter_market_name"
+        android:inputType="textCapWords" >
+
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/dates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="fill_vertical" >
+        
+        <LinearLayout
+            android:id="@+id/mon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+        	    android:id="@+id/textMon"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:text="Mon" />
+
+        	<CheckBox
+        	    android:id="@+id/checkMon"
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/tue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textTue"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Tue" />
+
+        	<CheckBox
+            	android:id="@+id/checkTue"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/wed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textWed"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Wed" />
+
+        	<CheckBox
+            	android:id="@+id/checkWed"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/thu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textThu"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Thu" />
+
+        	<CheckBox
+            	android:id="@+id/checkThu"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/fri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textFri"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Fri" />
+
+        	<CheckBox
+            	android:id="@+id/checkFri"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/sat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textSat"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Sat" />
+
+        	<CheckBox
+            	android:id="@+id/checkSat"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/sun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+        
+        	<TextView
+            	android:id="@+id/textSun"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+            	android:text="Sun" />
+
+        	<CheckBox
+            	android:id="@+id/checkSun"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+        	    android:layout_gravity="center_horizontal"
+        	    android:onClick="onCheckboxClicked"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/openTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Open"
+            android:inputType="time" />
+
+        <EditText
+            android:id="@+id/closeTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Close"
+            android:inputType="time" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Vendors at this Market" />
+
+    <Button
+        android:id="@+id/saveNewMarket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+
+</LinearLayout>

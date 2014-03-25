@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+    
+    <item
+        android:id="@+id/add_item"
+        android:icon="@drawable/ic_add_item"
+    	android:title="Add Item"
+    	android:showAsAction="always" />
+    
+    <item
+        android:id="@+id/add_vendor"
+        android:icon="@drawable/ic_add_vendor"
+    	android:title="Add Vendor"
+    	android:showAsAction="always" />
+
+</menu>

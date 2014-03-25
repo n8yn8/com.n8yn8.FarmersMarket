@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories_array">
+        <item>Choose a Category</item>
+        <item>Berries</item>
+        <item>Citrus</item>
+        <item>Cruciferus</item>
+        <item>Melon</item>
+        <item>Onions</item>
+        <item>Pome Fruit</item>
+        <item>Root Vegetables</item>
+        <item>Squash</item>
+        <item>Stalk Vegetables</item>
+        <item>Stone Fruit</item>
+        <item>Tubers</item>
+    </string-array>
+    
+</resources>

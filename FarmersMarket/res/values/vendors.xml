@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="vendors_array">
+        <item>Choose a Vendor</item>
+        <item>Farm A</item>
+        <item>Farm B</item>
+        <item>Farm C</item>
+        <item>Farm D</item>
+    </string-array>
+</resources>
