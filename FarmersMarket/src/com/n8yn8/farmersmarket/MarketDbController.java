@@ -53,13 +53,13 @@ public class MarketDbController {
 
     	DatabaseHelper(Context applicationcontext) {
     		super(applicationcontext, Environment.getExternalStorageDirectory()+ File.separator + "FM" + File.separator + DATABASE_NAME, null, DATABASE_VERSION);
-    		Log.d(LOGCAT,DATABASE_NAME + " Created");
+    		//Log.d(LOGCAT,DATABASE_NAME + " Created");
     	}
 
     	@Override
     	public void onCreate(SQLiteDatabase db) {
     		db.execSQL(SQL_CREATE_ENTRIES);
-    		Log.d(LOGCAT,"markets Created");
+    		//Log.d(LOGCAT,"markets Created");
     	}
 
     	@Override
@@ -91,10 +91,12 @@ public class MarketDbController {
     public MarketDbController open() throws SQLException {
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
+        //Log.v(TAG, "Database opened.");
         return this;
     }
 
     public void close() {
+    	//Log.v(TAG, "Database closed.");
         mDbHelper.close();
     }
     

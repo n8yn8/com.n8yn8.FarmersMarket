@@ -3,6 +3,7 @@ package com.n8yn8.farmersmarket;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
 
 public class EditMarket extends Activity {
+	private static final String TAG = "EditMarket";
 	EditText marketName;
 	EditText openTime;
 	EditText closeTime;
@@ -55,8 +57,10 @@ public class EditMarket extends Activity {
     	confirmButton.setOnClickListener(new View.OnClickListener() {
 
     	    public void onClick(View view) {
+    	    	//Log.v(TAG, "Save button clicked");
     	        setResult(RESULT_OK);
     	        finish();
+    	        saveState();
     	        mDbHelper.close();
     	    }
 
@@ -65,6 +69,7 @@ public class EditMarket extends Activity {
 	
 	private void populateFields() {
         if (mRowId != null) {
+        	Log.v(TAG, "populateFields");
             Cursor market = mDbHelper.getMarket(mRowId);
             marketName.setText(market.getString(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Market)));
             openTime.setText(market.getString(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Open)));
@@ -78,6 +83,7 @@ public class EditMarket extends Activity {
 	@Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        //Log.v(TAG, "onSaveInstanceState");
         saveState();
         outState.putSerializable(FeedEntry._ID, mRowId);
     }
@@ -85,7 +91,8 @@ public class EditMarket extends Activity {
 	@Override
     protected void onPause() {
         super.onPause();
-        saveState();
+        //Log.v(TAG, "onPause");
+        //saveState();
     }
 	
 	@Override
@@ -95,6 +102,7 @@ public class EditMarket extends Activity {
     }
 	
 	private void saveState() {
+		//Log.v(TAG, "saveState");
 		String name = marketName.getText().toString();
 		String open = openTime.getText().toString();
 		String close = closeTime.getText().toString();
@@ -106,6 +114,7 @@ public class EditMarket extends Activity {
 				daysOpen += week[i];
 		
         if (mRowId == null) {
+        	//Log.v(TAG, "saveState inserting new Market");
             long id = mDbHelper.insertMarket(lat, lng, name, daysOpen, open, close);
             if (id > 0) {
                 mRowId = id;
