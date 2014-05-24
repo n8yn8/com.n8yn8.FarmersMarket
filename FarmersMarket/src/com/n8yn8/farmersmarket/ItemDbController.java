@@ -222,6 +222,12 @@ public class ItemDbController {
 
 		return mDb.update(FeedEntry.TABLE_NAME_I, values, FeedEntry._ID + "=" + rowId, null) > 0;
 	}
+	
+	public boolean updateItem(long rowId, String added) {
+		ContentValues values = new ContentValues();
+		values.put(FeedEntry.COLUMN_NAME_Added, added);
+		return mDb.update(FeedEntry.TABLE_NAME_I, values, FeedEntry._ID + "=" + rowId, null) > 0;
+	}
 
 	public boolean added(long rowId, String added){
 		ContentValues values = new ContentValues();

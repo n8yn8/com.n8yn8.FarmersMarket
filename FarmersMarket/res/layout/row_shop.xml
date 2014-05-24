@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
     <!--
          <CheckedTextView
@@ -11,11 +11,18 @@
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:gravity="center_vertical" />
     -->
+    
     <CheckBox
         android:id="@+id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+    
+    <LinearLayout
+        android:id="@+id/item_details"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/details"
@@ -28,7 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="item name" />
+            android:text="item name"
+            android:textStyle="bold"
+            android:textSize="18dp" />
         
         <TextView
             android:id="@+id/currency"
@@ -59,7 +68,7 @@
         android:id="@+id/Farm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp" >
+        android:layout_marginLeft="25dp" >
 
         <TextView
             android:id="@+id/at"
@@ -72,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="vendor" />
+    </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

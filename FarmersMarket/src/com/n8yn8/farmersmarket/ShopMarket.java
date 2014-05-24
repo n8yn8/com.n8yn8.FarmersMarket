@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -42,6 +43,8 @@ public class ShopMarket extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shop_market);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		mDbHelper = new ItemDbController(this);
         mDbHelper.open();
@@ -100,12 +103,12 @@ public class ShopMarket extends Activity {
 		if (itemCursor.moveToFirst()) {
 			int i = 0;
 	        do {
-	        	items.add(get(itemCursor.getString(1), itemCursor.getString(3), itemCursor.getString(4), itemCursor.getString(5), itemCursor.getString(6)));
+	        	items.add(get(itemCursor.getLong(0), itemCursor.getString(1), itemCursor.getString(3), itemCursor.getString(4), itemCursor.getString(5), itemCursor.getString(6)));
 	        	ids[i] = itemCursor.getLong(0);
 	        	i++;
 	        } while (itemCursor.moveToNext());
 		} else
-			items.add(get("Add a new Item first", null, null, null, null));
+			items.add(get(0,"Add a new Item first", null, null, null, null));
 		adapter = new InteractiveArrayAdapter(this, items);
 		
 		
@@ -155,8 +158,8 @@ public class ShopMarket extends Activity {
         registerForContextMenu(list);*/
 	}
 	
-	private Model get(String item, String price, String unit, String vendor, String added) {
-	    return new Model(item, price, unit, vendor, added);
+	private Model get(long id, String item, String price, String unit, String vendor, String added) {
+	    return new Model(id, item, price, unit, vendor, added);
 	  }
 
 
@@ -165,6 +168,20 @@ public class ShopMarket extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.add_bar, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.map_view:
+			Intent intent = new Intent(this, MarketsMap.class);
+			startActivity(intent);
+			
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override

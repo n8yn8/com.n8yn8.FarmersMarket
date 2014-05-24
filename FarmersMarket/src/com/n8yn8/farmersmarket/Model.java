@@ -4,18 +4,28 @@ import android.util.Log;
 
 public class Model {
 
+	long id;
 	private String name;
 	private String price;
 	private String unit;
 	private String vendor;
 	private boolean selected;
 
-	public Model(String name, String price, String unit, String vendor, String added) {
+	public Model(long id, String name, String price, String unit, String vendor, String added) {
+		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.unit = unit;
 		this.vendor = vendor;
 		selected = added.equals("yes");
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {

@@ -12,7 +12,15 @@ public class Group {
 		this.string = string;
 	}
 	
+	public void updateGroupCount(){
+		this.string = this.string + " (" + childrenCount() + ")";
+	}
+	
 	public boolean childrenEmpty(){
 		return children.isEmpty();
+	}
+	
+	public int childrenCount(){
+		return children.size();
 	}
 }

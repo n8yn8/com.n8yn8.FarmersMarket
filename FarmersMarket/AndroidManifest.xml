@@ -47,37 +47,39 @@
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.MarketsMap"
-            android:label="@string/title_activity_find_markets" >
+            android:label="@string/title_activity_find_markets"
+            android:parentActivityName="com.n8yn8.farmersmarket.MarketList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.n8yn8.farmersmarket.MarketList" />
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.Inventory"
-            android:label="@string/title_activity_inventory" >
+            android:label="@string/title_activity_inventory" 
+            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.EditMarket"
             android:label="@string/title_activity_new_market" >
         </activity>
-        <!--
-             <activity
-            android:name="com.n8yn8.farmersmarket.ShopInventory"
-            android:label="@string/title_activity_shop_inventory" >
-        </activity>
-        <activity
-            android:name="com.n8yn8.farmersmarket.AddVendor"
-            android:label="@string/title_activity_add_vendor" >
-        </activity>
-        <activity
-            android:name="com.n8yn8.farmersmarket.Shop"
-            android:label="@string/title_activity_shop" >
-        </activity>
-        -->
         <activity
             android:name="com.n8yn8.farmersmarket.ShopMarket"
-            android:label="@string/title_activity_shop_market" >
+            android:label="@string/title_activity_shop_market"
+            android:parentActivityName="com.n8yn8.farmersmarket.MarketList" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.n8yn8.farmersmarket.MarketList" />
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.GroceryList"
-            android:label="@string/title_activity_grocery_list" >
+            android:label="@string/title_activity_grocery_list"
+            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.EdiItem"

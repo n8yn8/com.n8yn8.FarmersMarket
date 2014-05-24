@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -28,13 +29,16 @@ public class GroceryList extends Activity {
 	private VendorDbController mVDbHelper;
 	String sortBy;
 	SparseArray<Group> groups;
-	long[][] ids;
+	//long[][] ids;
+	ExpandableListView listView;
 	MyExpandableListAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_grocery_list);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		mIDbHelper = new ItemDbController(this);
 		mIDbHelper.open();
 
@@ -43,6 +47,34 @@ public class GroceryList extends Activity {
 		
 		List<String> categories = Arrays.asList(getResources().getStringArray(R.array.categories_array));
 		fillData(categories, FeedEntry.COLUMN_NAME_Type);
+		
+		Button removeItems = (Button) findViewById(R.id.remove);
+		removeItems.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View view) {
+				for(int i = 0; i<groups.size(); i++){
+					Group group = groups.get(i);
+					List <Model> children = group.children;
+					for(int j = 0; j < group.childrenCount(); j++){
+						Model child = children.get(j);
+						if (child.isSelected()) {
+							mIDbHelper.updateItem(child.id, "no");
+							children.remove(j);
+						}
+					}
+				}
+				adapter.notifyDataSetChanged();
+				//Toast.makeText(getBaseContext(), "Items removed", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	@Override
+	protected void onPause() {
+		mIDbHelper.close();
+		mVDbHelper.close();
+		
+		super.onPause();
 	}
 
 	@Override
@@ -50,6 +82,17 @@ public class GroceryList extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.add_bar, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -114,23 +157,24 @@ public class GroceryList extends Activity {
 						vendor = cursor.getString(6);
 					//Include items in the group if they are added to the grocery list.
 					if (cursor.getString(8).equals("yes")) {
-						group.children.add(get(cursor.getString(1), cursor.getString(3), cursor.getString(4), cursor.getString(5), vendor));
+						group.children.add(get(cursor.getLong(0), cursor.getString(1), cursor.getString(3), cursor.getString(4), cursor.getString(5), vendor));
 						childID++;
 					}
 				} while (cursor.moveToNext());
 				//Include the group if it contains children.
 				if(!group.childrenEmpty()){
+					group.updateGroupCount();
 					groups.put(groupID, group);
 					groupID++;
 				}
 			}
 		}
-		ExpandableListView listView = (ExpandableListView) findViewById(R.id.listView);
+		listView = (ExpandableListView) findViewById(R.id.listView);
 		adapter = new MyExpandableListAdapter(this, groups);
 		listView.setAdapter(adapter);
 	}
 	
-	private Model get(String item, String price, String unit, String vendor, String added) {
-	    return new Model(item, price, unit, vendor, added);
+	private Model get(long id, String item, String price, String unit, String vendor, String added) {
+	    return new Model(id, item, price, unit, vendor, added);
 	  }
 }
