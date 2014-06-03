@@ -21,7 +21,7 @@ import com.n8yn8.farmersmarket.Contract.FeedEntry;
 
 public class MarketList extends Activity {
 	private MarketDbController mDbHelper;
-	ListView marketView;
+	//ListView marketView;
 	String market;
 	
 	private static final int DELETE_ID = Menu.FIRST + 1;

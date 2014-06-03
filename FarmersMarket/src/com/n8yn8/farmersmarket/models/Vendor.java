@@ -1,23 +1,28 @@
 package com.n8yn8.farmersmarket.models;
 
 public class Vendor {
-	int _ID;
+	long _ID;
 	String name;
 	
 	public Vendor() {
 		
 	}
 	
-	public Vendor(int id, String name) {
+	public Vendor(String name) {
+		super();
+		this.name = name;
+	}
+
+	public Vendor(long id, String name) {
 		super();
 		this._ID = id;
 		this.name = name;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return _ID;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this._ID = id;
 	}
 	public String getName() {

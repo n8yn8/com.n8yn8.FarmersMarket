@@ -1,26 +1,31 @@
 package com.n8yn8.farmersmarket;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.adapter.MarketCheckListAdapter;
+import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Market;
+import com.n8yn8.farmersmarket.models.Vendor;
 
 public class EditVendor extends Activity {
-	private VendorDbController mVendorDbHelper;
-	private MarketDbController mMarketDbHelper;
-	EditText vendorName;
-	Spinner marketName;
+	
+	private String TAG = "EditVendor";
+	private DatabaseHelper db;
+	MarketCheckListAdapter marketAdapter;
+	EditText vendorNameField;
+	ListView marketName;
 	CheckBox isOrganic;
 	private Long mRowId;
 	boolean mOrganic;
@@ -31,14 +36,10 @@ public class EditVendor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_vendor);
 
-		mVendorDbHelper = new VendorDbController(this);
-		mVendorDbHelper.open();
-		
-		mMarketDbHelper = new MarketDbController(this);
-		mMarketDbHelper.open();
+		db = new DatabaseHelper(this);
 
-		vendorName = (EditText) findViewById(R.id.vendor_name);
-		marketName = (Spinner) findViewById(R.id.market_spinner);
+		vendorNameField = (EditText) findViewById(R.id.vendor_name);
+		marketName = (ListView) findViewById(R.id.market_spinner);
 		isOrganic = (CheckBox) findViewById(R.id.check_organic);
 		
 		Button confirmButton = (Button) findViewById(R.id.saveVendor);
@@ -64,31 +65,19 @@ public class EditVendor extends Activity {
 	}
 
 	private void populateFields(){
-		// Get all of the rows from the database and create the item list
-		ArrayList<String> markets = new ArrayList <String>();
-		Cursor marketCursor = mMarketDbHelper.getAllMarkets();
-		if (marketCursor.moveToFirst()) {
-	        do {
-	        	markets.add(marketCursor.getString(3));
-	        } while (marketCursor.moveToNext());
-		} else
-			markets.add("Add a new Market first");
-		ArrayAdapter<String> spinAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, markets);
-		spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		marketName.setAdapter(spinAdapter);
-		marketName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				mMarket = parent.getItemAtPosition(position).toString();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		List<Market> markets;
+		if (mRowId != null) {
+        	Log.v(TAG, "populateFields");
+            Vendor vendor = db.getVendor(mRowId);
+            vendorNameField.setText(vendor.getName());
+            markets = db.getAllMarketsForVendor(mRowId, vendor.getName());
+            //TODO populate markets that the vendor is at.
+        } else {
+        	markets = db.getAllMarkets();
+        }
+		
+		marketAdapter = new MarketCheckListAdapter(this, markets);
+		marketName.setAdapter(marketAdapter);
 	}
 
 	@Override
@@ -102,8 +91,7 @@ public class EditVendor extends Activity {
 	protected void onPause() {
 		super.onPause();
 		saveState();
-		mVendorDbHelper.close();
-		mMarketDbHelper.close();
+		db.close();
 	}
 
 	@Override
@@ -113,15 +101,27 @@ public class EditVendor extends Activity {
 	}
 
 	private void saveState() {
-		String vendor = vendorName.getText().toString();
-
+		String vendorName = vendorNameField.getText().toString();
+		Vendor vendor;
+		List<Market> markets = marketAdapter.markets;
+		ArrayList<Long> market_ids = new ArrayList<Long>();
+		for (int i = 0; i < markets.size(); i++) {
+			Market market = markets.get(i);
+			if (market.isSelected()) {
+				Log.v(TAG + "Selected", market.getName());
+				market_ids.add(market.getId());
+			}
+		}
 		if (mRowId == null) {
-			long id = mVendorDbHelper.insertVendor(vendor, mMarket, mOrganic);
+			vendor = new Vendor(vendorName);
+			long id = db.createVendor(vendor, market_ids);
 			if (id > 0) {
 				mRowId = id;
 			}
 		} else {
-			mVendorDbHelper.updateVendor(mRowId, vendor, mMarket, mOrganic);
+			vendor = new Vendor(mRowId, vendorName);
+			db.updateVendor(vendor);
+			//TODO update vendor at markets.
 		}
 	}
 

@@ -1,8 +1,9 @@
 package com.n8yn8.farmersmarket;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -15,13 +16,14 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Market;
 
 public class MarketsMap extends Activity implements OnMapLongClickListener, OnInfoWindowClickListener{
 	private static final int ACTIVITY_CREATE=0;
     private static final int ACTIVITY_EDIT=1;
 	private GoogleMap mMap;
-	private MarketDbController mDbHelper;
+	private DatabaseHelper db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +32,8 @@ public class MarketsMap extends Activity implements OnMapLongClickListener, OnIn
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		setUpMapIfNeeded();
-		mDbHelper = new MarketDbController(this);
-        mDbHelper.open();
+		db = new DatabaseHelper(this);
+        //db.open();
 		//placeMarkers();
 	}
 
@@ -76,21 +78,13 @@ public class MarketsMap extends Activity implements OnMapLongClickListener, OnIn
     
     private void placeMarkers(){
 
-    	Cursor cursor = mDbHelper.getAllMarkets();
-    	if (cursor.moveToFirst()) {
-    		do{
-    			long itemId = cursor.getLong(cursor.getColumnIndexOrThrow(FeedEntry._ID));
-    			LatLng here = new LatLng(
-    					cursor.getDouble(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Lat)),
-    					cursor.getDouble(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Lng))
-    					);
-    			String name = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Market));
-    			String days = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Days));
-    			String hours = cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Open))+
-    					"-" + cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Close));
-    			mMap.addMarker(new MarkerOptions().position(here).title(name).snippet(days + " " + hours));
-    		}while (cursor.moveToNext());
+    	List<Market> markets = db.getAllMarkets();
+    	for (Market market : markets) {
+    		LatLng here = new LatLng(market.getLatitude(), market.getLongitude());
+    		String hours = market.getOpen()+"-" + market.getClose();
+    		mMap.addMarker(new MarkerOptions().position(here).title(market.getName()).snippet(market.getDays() + " " + hours));
     	}
+    	
     }
 
 	@Override

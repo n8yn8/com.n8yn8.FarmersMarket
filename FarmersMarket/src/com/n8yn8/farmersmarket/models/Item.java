@@ -1,7 +1,7 @@
 package com.n8yn8.farmersmarket.models;
 
 public class Item {
-	int _ID;
+	long _ID;
 	String name;
 	String type;
 	String price;
@@ -12,6 +12,10 @@ public class Item {
 	String added;
 	String photo;
 	
+	public Item() {
+		super();
+	}
+
 	public Item(String name, String type, String price, String unit,
 			String vendor, String seasonStart, String seasonEnd, String added,
 			String photo) {
@@ -27,7 +31,7 @@ public class Item {
 		this.photo = photo;
 	}
 
-	public Item(int _ID, String name, String type, String price, String unit,
+	public Item(long _ID, String name, String type, String price, String unit,
 			String vendor, String seasonStart, String seasonEnd, String added,
 			String photo) {
 		super();
@@ -41,6 +45,14 @@ public class Item {
 		this.seasonEnd = seasonEnd;
 		this.added = added;
 		this.photo = photo;
+	}
+
+	public long get_ID() {
+		return _ID;
+	}
+
+	public void set_ID(long _ID) {
+		this._ID = _ID;
 	}
 
 	public String getName() {
@@ -113,9 +125,5 @@ public class Item {
 
 	public void setPhoto(String photo) {
 		this.photo = photo;
-	}
-
-	public int get_ID() {
-		return _ID;
 	}
 }

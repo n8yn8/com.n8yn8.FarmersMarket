@@ -36,7 +36,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		View view = null;
-		Model children = getChild(groupPosition, childPosition);
+		Model child = getChild(groupPosition, childPosition);
 		if (convertView == null) {
 	      view = inflater.inflate(R.layout.row_shop, null);
 	      final ViewHolder viewHolder = new ViewHolder();
@@ -64,12 +64,12 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 	      ((ViewHolder) view.getTag()).checkbox.setTag(groups.get(groupPosition).children.get(childPosition));
 	    }
 	    ViewHolder holder = (ViewHolder) view.getTag();
-	    holder.itemName.setText(children.getName());
-	    holder.price.setText(children.getPrice());
-		holder.unit.setText(children.getUnit());
-		holder.vendor.setText(children.getVendor());
+	    holder.itemName.setText(child.getName());
+	    holder.price.setText(child.getPrice());
+		holder.unit.setText(child.getUnit());
+		holder.vendor.setText(child.getVendor());
 	    holder.checkbox.setFocusable(false);
-	    holder.checkbox.setChecked(children.isSelected());
+	    holder.checkbox.setChecked(child.isSelected());
 	    return view;
 	    
 		/*Model children = getChild(groupPosition, childPosition);

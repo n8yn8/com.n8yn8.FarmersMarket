@@ -11,7 +11,14 @@ public final class R {
     public static final class array {
         public static final int categories_array=0x7f080000;
         public static final int months_array=0x7f080001;
-        public static final int vendors_array=0x7f080002;
+        /**  Nav Drawer List Item Icons 
+ Keep them in order as the titles are in 
+         */
+        public static final int nav_drawer_icons=0x7f080003;
+        /**  Nav Drawer Menu Items 
+         */
+        public static final int nav_drawer_items=0x7f080002;
+        public static final int vendors_array=0x7f080004;
     }
     public static final class attr {
         /** 
@@ -181,9 +188,15 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f040006;
         public static final int common_signin_btn_light_text_focused=0x7f040007;
         public static final int common_signin_btn_light_text_pressed=0x7f040005;
-        public static final int common_signin_btn_text_dark=0x7f04000b;
-        public static final int common_signin_btn_text_light=0x7f04000c;
-        public static final int pressed_emerald=0x7f04000a;
+        public static final int common_signin_btn_text_dark=0x7f040011;
+        public static final int common_signin_btn_text_light=0x7f040012;
+        public static final int counter_text_bg=0x7f04000e;
+        public static final int counter_text_color=0x7f04000f;
+        public static final int list_background=0x7f04000b;
+        public static final int list_background_pressed=0x7f04000c;
+        public static final int list_divider=0x7f04000d;
+        public static final int list_item_title=0x7f04000a;
+        public static final int pressed_emerald=0x7f040010;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -221,38 +234,40 @@ containing a value of this type.
         public static final int common_signin_btn_text_normal_light=0x7f020016;
         public static final int common_signin_btn_text_pressed_dark=0x7f020017;
         public static final int common_signin_btn_text_pressed_light=0x7f020018;
-        public static final int ic_add_item=0x7f020019;
-        public static final int ic_add_vendor=0x7f02001a;
-        public static final int ic_item_holder=0x7f02001b;
-        public static final int ic_launcher=0x7f02001c;
-        public static final int ic_plusone_medium_off_client=0x7f02001d;
-        public static final int ic_plusone_small_off_client=0x7f02001e;
-        public static final int ic_plusone_standard_off_client=0x7f02001f;
-        public static final int ic_plusone_tall_off_client=0x7f020020;
-        public static final int old_map=0x7f020021;
+        public static final int counter_bg=0x7f020019;
+        public static final int ic_add_item=0x7f02001a;
+        public static final int ic_add_vendor=0x7f02001b;
+        public static final int ic_drawer=0x7f02001c;
+        public static final int ic_item_holder=0x7f02001d;
+        public static final int ic_launcher=0x7f02001e;
+        public static final int ic_plusone_medium_off_client=0x7f02001f;
+        public static final int ic_plusone_small_off_client=0x7f020020;
+        public static final int ic_plusone_standard_off_client=0x7f020021;
+        public static final int ic_plusone_tall_off_client=0x7f020022;
+        public static final int list_item_bg_normal=0x7f020023;
+        public static final int list_item_bg_pressed=0x7f020024;
+        public static final int list_selector=0x7f020025;
+        public static final int old_map=0x7f020026;
     }
     public static final class id {
         public static final int Buttons=0x7f050018;
         public static final int Details=0x7f050009;
-        public static final int Farm=0x7f050057;
-        public static final int Grocery=0x7f050043;
-        public static final int Inventory=0x7f050044;
+        public static final int Farm=0x7f05005d;
         public static final int LinearLayout1=0x7f050005;
         public static final int MainInfo=0x7f050006;
-        public static final int Markets=0x7f050042;
         public static final int Seasons=0x7f050013;
         public static final int Sorting=0x7f05003a;
         public static final int Time=0x7f050031;
-        public static final int action_settings=0x7f05005a;
+        public static final int action_settings=0x7f050060;
         public static final int addToGroceries=0x7f050017;
-        public static final int add_item=0x7f05005b;
-        public static final int add_vendor=0x7f05005c;
-        public static final int at=0x7f050058;
+        public static final int add_item=0x7f050061;
+        public static final int add_vendor=0x7f050062;
+        public static final int at=0x7f05005e;
         public static final int byType=0x7f05003b;
         public static final int byVendor=0x7f05003c;
         public static final int category=0x7f05000b;
-        public static final int check=0x7f050054;
-        public static final int checkBox1=0x7f05004a;
+        public static final int check=0x7f05005a;
+        public static final int checkBox1=0x7f050050;
         public static final int checkFri=0x7f05002a;
         public static final int checkMon=0x7f05001e;
         public static final int checkSat=0x7f05002d;
@@ -261,36 +276,43 @@ containing a value of this type.
         public static final int checkTue=0x7f050021;
         public static final int checkWed=0x7f050024;
         public static final int check_organic=0x7f050036;
-        public static final int close=0x7f050053;
+        public static final int close=0x7f050059;
         public static final int closeTime=0x7f050033;
-        public static final int currency=0x7f05004c;
-        public static final int dash=0x7f050052;
+        public static final int counter=0x7f05004e;
+        public static final int currency=0x7f050052;
+        public static final int dash=0x7f050058;
         public static final int dates=0x7f05001b;
-        public static final int days=0x7f050050;
-        public static final int details=0x7f050056;
+        public static final int days=0x7f050056;
+        public static final int details=0x7f05005c;
+        public static final int drawer_layout=0x7f050042;
+        public static final int frame_container=0x7f050043;
         public static final int fri=0x7f050028;
         public static final int hybrid=0x7f050004;
+        public static final int icon=0x7f05004c;
         public static final int in_season=0x7f050040;
         public static final int itemName=0x7f05000a;
-        public static final int item_details=0x7f050055;
+        public static final int item_details=0x7f05005b;
         public static final int item_imageView=0x7f050007;
         public static final int item_list=0x7f050041;
-        public static final int item_name=0x7f05004b;
-        public static final int item_price=0x7f05004d;
-        public static final int item_unit=0x7f05004f;
-        public static final int item_vendor=0x7f050059;
+        public static final int item_name=0x7f050051;
+        public static final int item_price=0x7f050053;
+        public static final int item_unit=0x7f050055;
+        public static final int item_vendor=0x7f05005f;
         public static final int listView=0x7f05003d;
+        public static final int list_slidermenu=0x7f050044;
         public static final int map=0x7f050046;
-        public static final int map_view=0x7f05005e;
+        public static final int map_view=0x7f050064;
+        public static final int marketCheck=0x7f05004f;
         public static final int marketName=0x7f05001a;
         public static final int market_list=0x7f050045;
         public static final int market_spinner=0x7f050037;
         public static final int mon=0x7f05001c;
+        public static final int new_vendor=0x7f05004a;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int open=0x7f050051;
+        public static final int open=0x7f050057;
         public static final int openTime=0x7f050032;
-        public static final int per=0x7f05004e;
+        public static final int per=0x7f050054;
         public static final int price=0x7f05000f;
         public static final int priceperunit=0x7f05000d;
         public static final int remove=0x7f05003e;
@@ -299,7 +321,7 @@ containing a value of this type.
         public static final int saveItem=0x7f050019;
         public static final int saveNewMarket=0x7f050034;
         public static final int saveVendor=0x7f050038;
-        public static final int save_vendor=0x7f05005d;
+        public static final int save_vendor=0x7f050063;
         public static final int season_end=0x7f050016;
         public static final int season_start=0x7f050014;
         public static final int selectCategory=0x7f050047;
@@ -319,11 +341,13 @@ containing a value of this type.
         public static final int textView4=0x7f050012;
         public static final int textWed=0x7f050023;
         public static final int thu=0x7f050025;
+        public static final int title=0x7f05004d;
         public static final int toList=0x7f050049;
         public static final int toggle=0x7f050039;
         public static final int tue=0x7f05001f;
         public static final int unit=0x7f050011;
         public static final int vendor=0x7f05000c;
+        public static final int vendor_list=0x7f05004b;
         public static final int vendor_name=0x7f050035;
         public static final int vendor_spinner=0x7f05003f;
         public static final int wed=0x7f050022;
@@ -341,13 +365,17 @@ containing a value of this type.
         public static final int activity_market_list=0x7f030006;
         public static final int activity_markets_map=0x7f030007;
         public static final int activity_shop_market=0x7f030008;
-        public static final int listrow_details=0x7f030009;
-        public static final int listrow_group=0x7f03000a;
-        public static final int row_grocery=0x7f03000b;
-        public static final int row_inventory=0x7f03000c;
-        public static final int row_markets=0x7f03000d;
-        public static final int row_shop=0x7f03000e;
-        public static final int row_shop2=0x7f03000f;
+        public static final int activity_vendor_list=0x7f030009;
+        public static final int drawer_list_item=0x7f03000a;
+        public static final int fragment_grocery_list=0x7f03000b;
+        public static final int listrow_details=0x7f03000c;
+        public static final int listrow_group=0x7f03000d;
+        public static final int row_checklist_markets=0x7f03000e;
+        public static final int row_grocery=0x7f03000f;
+        public static final int row_inventory=0x7f030010;
+        public static final int row_markets=0x7f030011;
+        public static final int row_shop=0x7f030012;
+        public static final int row_shop2=0x7f030013;
     }
     public static final class menu {
         public static final int add_bar=0x7f0b0000;
@@ -459,6 +487,9 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
+        /**  Content Description 
+         */
+        public static final int desc_list_item_icon=0x7f060030;
         public static final int enter_market_name=0x7f060020;
         public static final int hello_world=0x7f06002f;
         /**  Location client code resources (prefix with location_client) 

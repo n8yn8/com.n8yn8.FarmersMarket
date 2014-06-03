@@ -1,20 +1,32 @@
 package com.n8yn8.farmersmarket.models;
 
 public class Market {
-	
-	int _ID;
+
+	long _ID;
 	String name;
 	Double latitude;
 	Double longitude;
 	String days;
 	String open;
 	String close;
-	
+	boolean selected = false;
+
 	public Market() {
 		super();
 	}
 
-	public Market(int id, String name, Double latitude, Double longitude,
+	public Market(String name, Double latitude, Double longitude, String days,
+			String open, String close) {
+		super();
+		this.name = name;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.days = days;
+		this.open = open;
+		this.close = close;
+	}
+
+	public Market(long id, String name, Double latitude, Double longitude,
 			String days, String open, String close) {
 		super();
 		this._ID = id;
@@ -26,11 +38,11 @@ public class Market {
 		this.close = close;
 	}
 
-	public int getId() {
+	public long getId() {
 		return _ID;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this._ID = id;
 	}
 
@@ -81,6 +93,13 @@ public class Market {
 	public void setClose(String close) {
 		this.close = close;
 	}
+
+	public boolean isSelected() {
+		return selected;
+	}
 	
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
 
 }

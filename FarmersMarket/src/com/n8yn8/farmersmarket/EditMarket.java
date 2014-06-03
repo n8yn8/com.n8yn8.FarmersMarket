@@ -1,7 +1,6 @@
 package com.n8yn8.farmersmarket;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +11,8 @@ import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Market;
 
 public class EditMarket extends Activity {
 	private static final String TAG = "EditMarket";
@@ -21,37 +22,45 @@ public class EditMarket extends Activity {
 	LatLng location;
 	String[] week = new String[7];
 	private Long mRowId;
-	private MarketDbController mDbHelper;
+	private DatabaseHelper db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mDbHelper = new MarketDbController(this);
-    	mDbHelper.open();
+		db = new DatabaseHelper(this);
     	
 		setContentView(R.layout.activity_edit_market);
-		Bundle bundle = getIntent().getParcelableExtra("bundle");
-		location = bundle.getParcelable("lat_lng");
 		marketName = (EditText) findViewById(R.id.marketName);
 		openTime = (EditText) findViewById(R.id.openTime);
 		closeTime = (EditText) findViewById(R.id.closeTime);
 		Button confirmButton = (Button) findViewById(R.id.saveNewMarket);
 		
+		if (savedInstanceState == null) {
+			mRowId = null;
+		} else {
+			mRowId = (Long) savedInstanceState.getSerializable(FeedEntry._ID);
+		}
+		
+		if (mRowId == null) {
+			Bundle extras = getIntent().getExtras();
+			Boolean newMarket = extras.get("new_market").equals("true");
+			Log.v(TAG, "newMarket = "+newMarket);
+			if (newMarket) {
+				Bundle bundle = getIntent().getParcelableExtra("bundle");
+				location = bundle.getParcelable("lat_lng");
+			} else {
+				mRowId = extras.getLong(FeedEntry._ID);
+			}
+		}
 		/*
-		 * 
-		 * if(savedInstanceState.getSerializable("new_market").equals("true")){
-    		mRowId = null;
-    	}
-    	else{
-    		mRowId = (Long) savedInstanceState.getSerializable(FeedEntry._ID);
-    	}
-    	if (mRowId == null) {
-    	    Bundle extras = getIntent().getExtras();
-    	    mRowId = extras != null ? extras.getLong(FeedEntry._ID)
-    	                            : null;
-    	}*/
-    	
+		mRowId = (savedInstanceState == null) ? null :
+			(Long) savedInstanceState.getSerializable(FeedEntry._ID);
+		if (mRowId == null) {
+			Bundle extras = getIntent().getExtras();
+			mRowId = extras != null ? extras.getLong(FeedEntry._ID)
+					: null;
+		}*/
     	populateFields();
     	
     	confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +70,7 @@ public class EditMarket extends Activity {
     	        setResult(RESULT_OK);
     	        finish();
     	        saveState();
-    	        mDbHelper.close();
+    	        db.close();
     	    }
 
     	});
@@ -70,12 +79,11 @@ public class EditMarket extends Activity {
 	private void populateFields() {
         if (mRowId != null) {
         	Log.v(TAG, "populateFields");
-            Cursor market = mDbHelper.getMarket(mRowId);
-            marketName.setText(market.getString(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Market)));
-            openTime.setText(market.getString(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Open)));
-            closeTime.setText(market.getString(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Close)));
-            location = new LatLng(market.getLong(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Lat)),
-            		market.getLong(market.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Lng)));
+            Market market = db.getMarket(mRowId);
+            marketName.setText(market.getName());
+            openTime.setText(market.getOpen());
+            closeTime.setText(market.getClose());
+            location = new LatLng(market.getLatitude(), market.getLongitude());
             //TODO populate week fields
         }
     }
@@ -91,6 +99,7 @@ public class EditMarket extends Activity {
 	@Override
     protected void onPause() {
         super.onPause();
+        db.close();
         //Log.v(TAG, "onPause");
         //saveState();
     }
@@ -112,15 +121,17 @@ public class EditMarket extends Activity {
 		for(int i = 0; i < week.length; i++)
 			if(week[i] != null)
 				daysOpen += week[i];
-		
+		Market market;
         if (mRowId == null) {
         	//Log.v(TAG, "saveState inserting new Market");
-            long id = mDbHelper.insertMarket(lat, lng, name, daysOpen, open, close);
+        	market = new Market(name, lat, lng, daysOpen, open, close);
+            long id = db.createMarket(market);
             if (id > 0) {
                 mRowId = id;
             }
         } else {
-            mDbHelper.updateMarket(mRowId, lat, lng, name, daysOpen, open, close);
+        	market = new Market(mRowId, name, lat, lng, daysOpen, open, close);
+            db.updateMarket(market);
         }
     }
 
