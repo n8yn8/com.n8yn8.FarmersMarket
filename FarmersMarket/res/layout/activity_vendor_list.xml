@@ -10,17 +10,19 @@
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true" />
     
+    <ListView
+        android:id="@+id/vendor_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+
+    </ListView>
+    
     <Button
         android:id="@+id/new_vendor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Add a new Vendor" />
-
-    <ListView
-        android:id="@+id/vendor_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
 
 </LinearLayout>

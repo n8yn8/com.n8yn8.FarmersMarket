@@ -38,7 +38,7 @@ public class MarketListFragment extends Fragment {
 	private DatabaseHelper db;
 	ListView list;
 	List<Market> markets;
-	String market;
+	Market market;
 
 	public MarketListFragment() {}
 
@@ -80,7 +80,7 @@ public class MarketListFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				market = parent.getItemAtPosition(position).toString();
+				market = (Market) parent.getItemAtPosition(position);
 				startShopping(id);				
 			}
 		});
@@ -88,7 +88,7 @@ public class MarketListFragment extends Fragment {
 	
 	private void startShopping(long id){
 		Intent intent = new Intent(this.getActivity(), ShopMarket.class);
-		intent.putExtra("market_name", market);
+		intent.putExtra("market_id", market.getId());
 		startActivity(intent);
 	}
 	

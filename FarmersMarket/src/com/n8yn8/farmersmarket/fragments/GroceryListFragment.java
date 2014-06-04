@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Fragment;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -19,17 +18,18 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
-import com.n8yn8.farmersmarket.Group;
-import com.n8yn8.farmersmarket.ItemDbController;
-import com.n8yn8.farmersmarket.Model;
-import com.n8yn8.farmersmarket.MyExpandableListAdapter;
 import com.n8yn8.farmersmarket.R;
-import com.n8yn8.farmersmarket.VendorDbController;
+import com.n8yn8.farmersmarket.adapter.MyExpandableListAdapter;
+import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Group;
+import com.n8yn8.farmersmarket.models.Item;
+import com.n8yn8.farmersmarket.models.Vendor;
 
 public class GroceryListFragment extends Fragment {
+	
+	private static String TAG = "GroceryListFragment";
 
-	private ItemDbController mIDbHelper;
-	private VendorDbController mVDbHelper;
+	private DatabaseHelper db;
 	String sortBy;
 	SparseArray<Group> groups;
 	//long[][] ids;
@@ -37,30 +37,31 @@ public class GroceryListFragment extends Fragment {
 	MyExpandableListAdapter adapter;
 	RadioButton rb1;
 	RadioButton rb2;
-	
+
 	public GroceryListFragment() {}
-	
+
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-  
-        View rootView = inflater.inflate(R.layout.activity_grocery_list, container, false);
-        listView = (ExpandableListView) rootView.findViewById(R.id.listView);
-        Button removeItems = (Button) rootView.findViewById(R.id.remove);
-        
-        List<String> categories = Arrays.asList(getResources().getStringArray(R.array.categories_array));
-        fillData(categories, FeedEntry.COLUMN_NAME_Type);
-        
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Log.i(TAG, "onCreateView");
+
+		View rootView = inflater.inflate(R.layout.activity_grocery_list, container, false);
+		listView = (ExpandableListView) rootView.findViewById(R.id.listView);
+		Button removeItems = (Button) rootView.findViewById(R.id.remove);
+
+		List<String> categories = Arrays.asList(getResources().getStringArray(R.array.categories_array));
+		fillData(categories, FeedEntry.COLUMN_NAME_Type);
+
 		removeItems.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {
 				for(int i = 0; i<groups.size(); i++){
 					Group group = groups.get(i);
-					List <Model> children = group.children;
+					List <Item> children = group.children;
 					for(int j = 0; j < group.childrenCount(); j++){
-						Model child = children.get(j);
-						if (child.isSelected()) {
-							mIDbHelper.updateItem(child.getId(), "no");
+						Item child = children.get(j);
+						if (child.isAdded()) {
+							db.updateItem(child.get_ID(), "no");
 							children.remove(j);
 						}
 					}
@@ -69,29 +70,24 @@ public class GroceryListFragment extends Fragment {
 				//Toast.makeText(getBaseContext(), "Items removed", Toast.LENGTH_SHORT).show();
 			}
 		});
-        
-        return rootView;
-    }
+
+		return rootView;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		mIDbHelper = new ItemDbController(this.getActivity());
-		mIDbHelper.open();
-
-		mVDbHelper = new VendorDbController(this.getActivity());
-		mVDbHelper.open();
+		Log.i(TAG, "onCreate");
+		db = new DatabaseHelper(this.getActivity());
 		super.onCreate(savedInstanceState);
 	}
-	
+
 	@Override
 	public void onPause() {
-		mIDbHelper.close();
-		mVDbHelper.close();
+		Log.i(TAG, "onPause");
+		db.close();
 		super.onPause();
 	}
-	
-	
-	
+
 	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,8 +95,8 @@ public class GroceryListFragment extends Fragment {
 		getMenuInflater().inflate(R.menu.add_bar, menu);
 		return true;
 	}
-	
-	
+
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -126,24 +122,29 @@ public class GroceryListFragment extends Fragment {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-	*/
+	 */
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		Log.i(TAG, "onActivityCreated");
 		rb1 = (RadioButton) getActivity().findViewById(R.id.byType);
 		rb2 = (RadioButton) getActivity().findViewById(R.id.byVendor);
 		rb1.setOnClickListener(next_Listener);
 		rb2.setOnClickListener(next_Listener);
 	}
-	
-	private OnClickListener next_Listener = new OnClickListener() {
-        public void onClick(View v) {
 
-        	if(rb1.isChecked()){
-        		List<String> types = Arrays.asList(getResources().getStringArray(R.array.categories_array));
+	private OnClickListener next_Listener = new OnClickListener() {
+		public void onClick(View v) {
+
+			if(rb1.isChecked()){
+				List<String> types = Arrays.asList(getResources().getStringArray(R.array.categories_array));
 				fillData(types, FeedEntry.COLUMN_NAME_Type);
-        	} else {
+			} else {
+				List<Vendor> vendors = db.getAllVendors();
+				Toast.makeText(getActivity(), "Work in progress", Toast.LENGTH_SHORT).show();;
+				//TODO make sort by vendors work.
+				/*
         		List<String> vendors = new ArrayList<String>();
 				Cursor vCursor = mVDbHelper.getAllVendors();
 				if(vCursor.moveToFirst()){
@@ -152,52 +153,17 @@ public class GroceryListFragment extends Fragment {
 					} while (vCursor.moveToNext());
 				}
 				fillData(vendors, FeedEntry.COLUMN_NAME_Vendor);
-        	}
-        	
-        }
-    };
+				 */
+			}
+
+		}
+	};
 
 	private void fillData(List<String> categories, String column) {
-		groups = new SparseArray<Group>();
-		int groupID = 0;
-		
-		//Loop through categories to create groups.
-		for(int i = 1; i < categories.size(); i++){
-			String category = categories.get(i);
-			
-			//Loop through items of given group
-			Cursor cursor = mIDbHelper.getItemsOf(category, column, FeedEntry.COLUMN_NAME_Item);
-			if (cursor.moveToFirst()) {
-				Group group = new Group(category);
-				int childID = 0;
-				//Add children to the group.
-				do {
-					String vendor = "";
-					if(column.equals(FeedEntry.COLUMN_NAME_Type))
-						vendor = cursor.getString(6);
-					//Include items in the group if they are added to the grocery list.
-					if (cursor.getString(8).equals("yes")) {
-						group.children.add(get(cursor.getLong(0), cursor.getString(1), cursor.getString(3), cursor.getString(4), cursor.getString(5), vendor));
-						childID++;
-					}
-				} while (cursor.moveToNext());
-				//Include the group if it contains children.
-				if(!group.childrenEmpty()){
-					group.updateGroupCount();
-					groups.put(groupID, group);
-					groupID++;
-				}
-			}
-		}
-		
+		Log.i(TAG, "fillData");
+		groups = db.getItemsOf(categories, column, db.KEY_ITEM_NAME);
 		adapter = new MyExpandableListAdapter(this.getActivity(), groups);
 		listView.setAdapter(adapter);
 	}
-	
-	private Model get(long id, String item, String price, String unit, String vendor, String added) {
-	    return new Model(id, item, price, unit, vendor, added);
-	  }
-	
-	
 
 }

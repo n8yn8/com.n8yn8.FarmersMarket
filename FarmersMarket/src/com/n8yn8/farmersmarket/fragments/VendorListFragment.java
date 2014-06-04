@@ -8,27 +8,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
-import com.n8yn8.farmersmarket.EdiItem;
-import com.n8yn8.farmersmarket.EditMarket;
+import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.EditVendor;
 import com.n8yn8.farmersmarket.R;
-import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.adapter.MarketSpinnerAdapter;
 import com.n8yn8.farmersmarket.adapter.VendorListAdapter;
 import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Market;
 import com.n8yn8.farmersmarket.models.Vendor;
 
 public class VendorListFragment extends Fragment {
@@ -46,7 +46,7 @@ public class VendorListFragment extends Fragment {
 	ListView list;
 	Spinner marketSpin;
 	List<Vendor> vendors;
-	String chosenMarket;
+	Market chosenMarket;
 	
 	public VendorListFragment (){}
 	
@@ -76,21 +76,17 @@ public class VendorListFragment extends Fragment {
 	}
 
 	private void loadMarkets () {
-		List<String> markets = db.getAllMarketNames();
-		ArrayAdapter<String> spinAdapter = new ArrayAdapter<String>(this.getActivity(),
+		List<Market> markets = db.getAllMarkets();
+		final MarketSpinnerAdapter spinAdapter = new MarketSpinnerAdapter(this.getActivity(),
                 android.R.layout.simple_spinner_item, markets);
 		spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		marketSpin.setAdapter(spinAdapter);
 		marketSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				if(id == 0){
-					fillData();
-				}else{
-					chosenMarket = parent.getItemAtPosition(position).toString();
-					fillData();
-				}
-
+				chosenMarket = spinAdapter.getMarket(position);
+				Log.v(TAG, "ChosenMarket = " + chosenMarket.getName());
+				fillData();
 			}
 
 			@Override
@@ -105,10 +101,10 @@ public class VendorListFragment extends Fragment {
 		
 		if (chosenMarket == null){
 			vendors = db.getAllVendors();
-			Log.v("VendorListFragment fill data", "get all vendors");
+			Log.v(TAG, "fillData() get all vendors");
 		} else {
-			vendors = db.getAllVendorsAtMarket(chosenMarket);
-			Log.v("VendorListFragment fill data", "get vendors at "+chosenMarket);
+			vendors = db.getAllVendorsAtMarket(chosenMarket.getId());
+			Log.v(TAG, "fillData() get vendors at "+chosenMarket.getName());
 		}
 		VendorListAdapter vendorAdapter = new VendorListAdapter(getActivity(), vendors);
 		list.setAdapter(vendorAdapter);

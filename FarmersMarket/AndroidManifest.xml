@@ -82,7 +82,7 @@
                 android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.EdiItem"
+            android:name="com.n8yn8.farmersmarket.EditItem"
             android:label="@string/title_activity_add_item" >
         </activity>
         <activity

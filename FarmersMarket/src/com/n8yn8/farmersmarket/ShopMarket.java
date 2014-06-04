@@ -188,7 +188,7 @@ public class ShopMarket extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.add_item:
-			Intent newItem = new Intent(this, EdiItem.class);
+			Intent newItem = new Intent(this, EditItem.class);
 			startActivity(newItem);
 			return true;
 		case R.id.add_vendor:

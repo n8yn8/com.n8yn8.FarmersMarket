@@ -6,6 +6,7 @@ public class Item {
 	String type;
 	String price;
 	String unit;
+	long vendorId;
 	String vendor;
 	String seasonStart;
 	String seasonEnd;
@@ -17,14 +18,14 @@ public class Item {
 	}
 
 	public Item(String name, String type, String price, String unit,
-			String vendor, String seasonStart, String seasonEnd, String added,
+			long vendorId, String seasonStart, String seasonEnd, String added,
 			String photo) {
 		super();
 		this.name = name;
 		this.type = type;
 		this.price = price;
 		this.unit = unit;
-		this.vendor = vendor;
+		this.vendorId = vendorId;
 		this.seasonStart = seasonStart;
 		this.seasonEnd = seasonEnd;
 		this.added = added;
@@ -32,7 +33,7 @@ public class Item {
 	}
 
 	public Item(long _ID, String name, String type, String price, String unit,
-			String vendor, String seasonStart, String seasonEnd, String added,
+			long vendorId, String seasonStart, String seasonEnd, String added,
 			String photo) {
 		super();
 		this._ID = _ID;
@@ -40,7 +41,7 @@ public class Item {
 		this.type = type;
 		this.price = price;
 		this.unit = unit;
-		this.vendor = vendor;
+		this.vendorId = vendorId;
 		this.seasonStart = seasonStart;
 		this.seasonEnd = seasonEnd;
 		this.added = added;
@@ -87,12 +88,16 @@ public class Item {
 		this.unit = unit;
 	}
 
-	public String getVendor() {
-		return vendor;
+	public long getVendorId() {
+		return vendorId;
 	}
 
-	public void setVendor(String vendor) {
-		this.vendor = vendor;
+	public void setVendor(long vendorId) {
+		this.vendorId = vendorId;
+	}
+	
+	public String getVendor() {
+		return vendor;
 	}
 
 	public String getSeasonStart() {
@@ -117,6 +122,10 @@ public class Item {
 
 	public void setAdded(String added) {
 		this.added = added;
+	}
+	
+	public boolean isAdded() {
+		return this.added.equals("yes");
 	}
 
 	public String getPhoto() {

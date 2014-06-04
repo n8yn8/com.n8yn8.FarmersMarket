@@ -119,7 +119,7 @@ public class Inventory extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Intent i = new Intent(getApplicationContext(), EdiItem.class);
+				Intent i = new Intent(getApplicationContext(), EditItem.class);
 				i.putExtra(FeedEntry._ID, id);
 				startActivity(i);
 			}
@@ -180,7 +180,7 @@ public class Inventory extends Activity {
 			loadVendors();
 			return true;
 		case EDIT_ID:
-			Intent i = new Intent(this, EdiItem.class);
+			Intent i = new Intent(this, EditItem.class);
 			i.putExtra(FeedEntry._ID, info.id);
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;
@@ -189,7 +189,7 @@ public class Inventory extends Activity {
 	}
 
 	public void newItem() {
-		Intent i = new Intent(this, EdiItem.class);
+		Intent i = new Intent(this, EditItem.class);
 		startActivityForResult(i, ACTIVITY_CREATE_ITEM);
 	}
 	

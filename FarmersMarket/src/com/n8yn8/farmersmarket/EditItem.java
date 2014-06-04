@@ -5,12 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,17 +29,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.adapter.VendorSpinnerAdapter;
+import com.n8yn8.farmersmarket.models.DatabaseHelper;
+import com.n8yn8.farmersmarket.models.Item;
+import com.n8yn8.farmersmarket.models.Vendor;
 
-public class EdiItem extends Activity {
+public class EditItem extends Activity {
 	private static final String TAG = "EditItem";
-	private static final String LOGCAT = null;
 	
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
-	private ItemDbController mItemDbHelper;
-	private VendorDbController mVendorDbHelper;
+	private DatabaseHelper db;
 	EditText itemName;
 	Spinner categorySpinner, vendorSpinner, startSpinner, endSpinner;
-	String item, category, vendor, added, price, unit, start, end, photo;
+	String name, category, added, price, unit, start, end, photo;
+	long vendorId;
 	private static String mCurrentPhotoPath;
 	EditText setPrice, setUnit;
 	CheckBox isAdded;
@@ -57,11 +59,7 @@ public class EdiItem extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mItemDbHelper = new ItemDbController(this);
-		mItemDbHelper.open();
-
-		mVendorDbHelper = new VendorDbController(this);
-		mVendorDbHelper.open();
+		db = new DatabaseHelper(this);
 
 		setContentView(R.layout.activity_edit_item);
 		itemName = (EditText) findViewById(R.id.itemName);
@@ -149,62 +147,15 @@ public class EdiItem extends Activity {
 			}
 		});
 
-		/*//MatrixCursor extras = new MatrixCursor(new String[] { FeedEntry._ID, FeedEntry.COLUMN_NAME_Vendor });
-		//extras.addRow(new String[] { "-1", "Choose a Vendor" });
-		Cursor vendorCursor = mVendorDbHelper.getAllVendors();
-		startManagingCursor(vendorCursor);
-		//Cursor[] cursors = { extras, vendorCursor };
-		//Cursor extendedCursor = new MergeCursor(cursors);
-		String[] from = new String[]{FeedEntry.COLUMN_NAME_Vendor};
-		int[] to = new int[]{android.R.id.text1};
-		SimpleCursorAdapter vendorsAdapter = 
-				new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, vendorCursor, from, to);
-		vendorSpinner=(Spinner)findViewById(R.id.vendor);
-		vendorsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		vendorSpinner.setAdapter(vendorsAdapter);
-		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				vendor = parent.getItemAtPosition(position).toString();
-				Toast.makeText(getBaseContext(), position+vendor, Toast.LENGTH_SHORT).show();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});*/
-
-
-		/*Cursor vendorCursor = mVendorDbHelper.getAllVendors();
-		// Create an array to specify the fields we want to display in the list (only TITLE)
-		String[] from = new String[]{FeedEntry.COLUMN_NAME_Vendor};
-
-		// and an array of the fields we want to bind those fields to (in this case just text1)
-		int[] to = new int[]{R.id.item_name};
-
-		// Now create a simple cursor adapter and set it to display
-		SimpleCursorAdapter vendorAdapter = 
-				new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, vendorCursor, from, to);
-		 */
-
-		ArrayList<String> vendors = new ArrayList <String>();
-		Cursor vendorCursor = mVendorDbHelper.getAllVendors();
-		if (vendorCursor.moveToFirst()) {
-	        do {
-	        	vendors.add(vendorCursor.getString(1));
-	        } while (vendorCursor.moveToNext());
-		} else
-			vendors.add("Add a new Vendor first");
-		ArrayAdapter<String> vendorAdapter = new ArrayAdapter<String>(this,
+		List<Vendor> vendors = db.getAllVendors();
+		final VendorSpinnerAdapter vendorAdapter = new VendorSpinnerAdapter(this,
                 android.R.layout.simple_spinner_item, vendors);
 		vendorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vendorSpinner.setAdapter(vendorAdapter);
 		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				vendor = parent.getItemAtPosition(position).toString();
+				vendorId = vendorAdapter.getVendor(position).getId();
 			}
 
 			@Override
@@ -244,47 +195,28 @@ public class EdiItem extends Activity {
 		});
 
 		if (mRowId != null) {
-			Cursor itemCursor = mItemDbHelper.getItem(mRowId);
-			item = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Item));
-			itemName.setText(item);
-
-			category = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Type));
-			int cPosition = categoryAdapter.getPosition(category);
+			Item item = db.getItem(mRowId);
+			
+			itemName.setText(item.getName());
+			int cPosition = categoryAdapter.getPosition(item.getType());
 			categorySpinner.setSelection(cPosition);
 
-			setPrice.setText(itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Price)));
-			setUnit.setText(itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Unit)));
-
-			/*This is for use with SimpleCursorAdapter
-			Cursor vcursor = vendorsAdapter.getCursor();
-			vcursor.moveToPosition(-1);
-			int columnIndex = vcursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Vendor);
-			while(vcursor.moveToNext()) {
-				if(vcursor.getString(columnIndex).equals(vendor)){
-					//Toast.makeText(this, vcursor.getString(columnIndex), Toast.LENGTH_SHORT).show();
-					break;
-				}
-			}
-			vendorSpinner.setSelection(vcursor.getPosition());*/
-
-			//This is for use with ArrayAdapter.
-			vendor = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Vendor));
-			int vPosition = vendorAdapter.getPosition(vendor);
+			setPrice.setText(item.getPrice());
+			setUnit.setText(item.getUnit());
+			Vendor thisVendor = db.getVendor(item.getVendorId());
+			int vPosition = vendorAdapter.getPosition(thisVendor);
 			vendorSpinner.setSelection(vPosition);
 			
-			start = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Start));
-			int sPosition = monthAdapter.getPosition(start);
+			int sPosition = monthAdapter.getPosition(item.getSeasonStart());
 			startSpinner.setSelection(sPosition);
 			
-			end = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_End));
-			int ePosition = monthAdapter.getPosition(end);
+			int ePosition = monthAdapter.getPosition(item.getSeasonEnd());
 			endSpinner.setSelection(ePosition);
 
-			added = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Added));
 			if(added!=null)
-				isAdded.setChecked(added.equals("yes"));
+				isAdded.setChecked(item.getAdded().equals("yes"));
 
-			mCurrentPhotoPath = itemCursor.getString(itemCursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_Photo));
+			mCurrentPhotoPath = item.getPhoto();
 			if(mCurrentPhotoPath!=null){
 				Log.d(TAG,"on create has photo path " + mCurrentPhotoPath);
 				loadBitmap();
@@ -324,17 +256,20 @@ public class EdiItem extends Activity {
 	}
 
 	private void saveState() {
-		item = itemName.getText().toString();
+		name = itemName.getText().toString();
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
+		
+		Item item = new Item(name, category, price, unit, vendorId, start, end, added, mCurrentPhotoPath);
 
 		if (mRowId == null) {
-			long id = mItemDbHelper.insertItem(item, category, price, unit, vendor, start, end, added, mCurrentPhotoPath);
+			long id = db.createItem(item);
 			if (id > 0) {
 				mRowId = id;
 			}
 		} else {
-			mItemDbHelper.updateItem(mRowId, item, category, price, unit, vendor, start, end, added, mCurrentPhotoPath);
+			item.set_ID(mRowId);
+			db.updateItem(item);
 		}
 	}
 
