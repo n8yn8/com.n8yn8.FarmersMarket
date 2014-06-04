@@ -38,6 +38,7 @@ public class MarketListFragment extends Fragment {
 	private DatabaseHelper db;
 	ListView list;
 	List<Market> markets;
+	MarketListAdapter marketsAdapter;
 	Market market;
 
 	public MarketListFragment() {}
@@ -60,35 +61,22 @@ public class MarketListFragment extends Fragment {
 	
 	private void fillData(){
 		markets = db.getAllMarkets();
-		//Cursor marketsCursor = mDbHelper.getAllMarkets();
-
-		/*
-		// Create an array to specify the fields we want to display in the list (only TITLE)
-		String[] from = new String[]{FeedEntry.COLUMN_NAME_Market, FeedEntry.COLUMN_NAME_Days, FeedEntry.COLUMN_NAME_Open, FeedEntry.COLUMN_NAME_Close};
-
-		// and an array of the fields we want to bind those fields to (in this case just text1)
-		int[] to = new int[]{R.id.marketName, R.id.days, R.id.open, R.id.close};
-
-		// Now create a simple cursor adapter and set it to display
-		SimpleCursorAdapter marketsAdapter = 
-				new SimpleCursorAdapter(this.getActivity(), R.layout.row_markets, marketsCursor, from, to);
-		*/
-		MarketListAdapter marketsAdapter = new MarketListAdapter(getActivity(), markets);
+		marketsAdapter = new MarketListAdapter(getActivity(), markets);
 		list.setAdapter(marketsAdapter);
 		registerForContextMenu(list);
 		list.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				market = (Market) parent.getItemAtPosition(position);
-				startShopping(id);				
+				market = (Market) marketsAdapter.getMarket(position);
+				startShopping(market.getId());				
 			}
 		});
 	}
 	
 	private void startShopping(long id){
 		Intent intent = new Intent(this.getActivity(), ShopMarket.class);
-		intent.putExtra("market_id", market.getId());
+		intent.putExtra("market_id", id);
 		startActivity(intent);
 	}
 	

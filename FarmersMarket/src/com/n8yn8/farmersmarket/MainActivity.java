@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Initialize TestFlight with your app token.
-        TestFlight.takeOff(getApplication(), "17759818-827d-469a-80a5-1db253d778bd");
+        //TestFlight.takeOff(getApplication(), "17759818-827d-469a-80a5-1db253d778bd");
 		setContentView(R.layout.activity_main);
 		
 		mTitle = mDrawerTitle = getTitle();
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
         // Photos
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         // Communities, Will add a counter here
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
         // Pages
         //navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         // What's hot, We  will add a counter here
@@ -207,10 +207,10 @@ public class MainActivity extends Activity {
             fragment = new MarketListFragment();
             break;
         case 2:
-            fragment = new InventoryFragment();
+        	fragment = new VendorListFragment();
             break;
         case 3:
-            fragment = new VendorListFragment();
+        	fragment = new InventoryFragment();
             break;
         /*case 4:
             fragment = new PagesFragment();

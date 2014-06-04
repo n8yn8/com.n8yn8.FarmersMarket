@@ -41,7 +41,7 @@ public class EditItem extends Activity {
 	private DatabaseHelper db;
 	EditText itemName;
 	Spinner categorySpinner, vendorSpinner, startSpinner, endSpinner;
-	String name, category, added, price, unit, start, end, photo;
+	String name, category, added, price, unit, vendorName, start, end, photo;
 	long vendorId;
 	private static String mCurrentPhotoPath;
 	EditText setPrice, setUnit;
@@ -155,7 +155,9 @@ public class EditItem extends Activity {
 		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				vendorId = vendorAdapter.getVendor(position).getId();
+				Vendor thisVendor = vendorAdapter.getVendor(position);
+				vendorId = thisVendor.getId();
+				vendorName = thisVendor.getName();
 			}
 
 			@Override
@@ -260,7 +262,7 @@ public class EditItem extends Activity {
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
 		
-		Item item = new Item(name, category, price, unit, vendorId, start, end, added, mCurrentPhotoPath);
+		Item item = new Item(name, category, price, unit, vendorId, vendorName, start, end, added, mCurrentPhotoPath);
 
 		if (mRowId == null) {
 			long id = db.createItem(item);

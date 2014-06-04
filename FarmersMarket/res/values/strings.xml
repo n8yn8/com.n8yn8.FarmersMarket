@@ -27,8 +27,8 @@
     <string-array name="nav_drawer_items">
         <item >Grocery List</item>
         <item >Market List</item>
-        <item >Inventory</item>
         <item >Vendor List</item>
+        <item >Item List</item>
     </string-array>
     
     <!-- Nav Drawer List Item Icons -->

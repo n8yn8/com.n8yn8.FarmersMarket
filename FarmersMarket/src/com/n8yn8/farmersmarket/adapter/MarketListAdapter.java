@@ -33,6 +33,10 @@ public class MarketListAdapter extends BaseAdapter{
     public Object getItem(int position) {
         return position;
     }
+    
+    public Market getMarket(int position){
+        return markets.get(position);
+     }
  
     public long getItemId(int position) {
         return position;

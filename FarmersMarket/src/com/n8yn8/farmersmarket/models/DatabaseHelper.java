@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	// Database Name
-	private static final String DATABASE_NAME = "FarmersMarkets";
+	private static final String DATABASE_NAME = "FarmersMarkets.db";
 
 	// Table Names
 	private static final String TABLE_ITEMS = "items";
@@ -38,17 +38,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// ITEMS Table - column names
 	public static final String KEY_ITEM_NAME = "item_name";
-	private static final String KEY_TYPE = "type";
+	public static final String KEY_TYPE = "type";
 	private static final String KEY_PRICE = "price";
 	private static final String KEY_UNIT = "unit";
-	private static final String KEY_VENDOR = "vendor";
 	private static final String KEY_START_DATE = "start";
 	private static final String KEY_END_DATE = "end";
 	private static final String KEY_ADDED_TO_GROCERIES = "added";
 	private static final String KEY_PHOTO = "photo";
 
 	// VENDORS Table - column names
-	private static final String KEY_VENDOR_NAME = "vendor_name";
+	public static final String KEY_VENDOR_NAME = "vendor_name";
 
 	// MARKETS Table - column names
 	private static final String KEY_MARKET_NAME = "market_name";
@@ -72,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ KEY_PRICE + " TEXT,"
 			+ KEY_UNIT + " TEXT,"
 			+ KEY_VENDOR_ID + " INTEGER,"
+			+ KEY_VENDOR_NAME + " TEXT,"
 			+ KEY_START_DATE + " TEXT,"
 			+ KEY_END_DATE + " TEXT,"
 			+ KEY_ADDED_TO_GROCERIES + " TEXT,"
@@ -577,6 +577,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_PRICE, item.getPrice());
 		values.put(KEY_UNIT, item.getUnit());
 		values.put(KEY_VENDOR_ID, item.getVendorId());
+		values.put(KEY_VENDOR_NAME, item.getVendorName());
 		values.put(KEY_START_DATE, item.getSeasonStart());
 		values.put(KEY_END_DATE, item.getSeasonEnd());
 		values.put(KEY_ADDED_TO_GROCERIES, item.getAdded());
@@ -611,7 +612,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		item.setType(c.getString(c.getColumnIndex(KEY_TYPE)));
 		item.setPrice(c.getString(c.getColumnIndex(KEY_PRICE)));
 		item.setUnit(c.getString(c.getColumnIndex(KEY_UNIT)));
-		item.setVendor(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+		item.setVendorId(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+		item.setVendorName(c.getString(c.getColumnIndex(KEY_VENDOR_NAME)));
 		item.setSeasonStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
 		item.setSeasonEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
 		item.setAdded(c.getString(c.getColumnIndex(KEY_ADDED_TO_GROCERIES)));
@@ -642,7 +644,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				item.setType(c.getString(c.getColumnIndex(KEY_TYPE)));
 				item.setPrice(c.getString(c.getColumnIndex(KEY_PRICE)));
 				item.setUnit(c.getString(c.getColumnIndex(KEY_UNIT)));
-				item.setVendor(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+				item.setVendorId(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+				item.setVendorName(c.getString(c.getColumnIndex(KEY_VENDOR_NAME)));
 				item.setSeasonStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
 				item.setSeasonEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
 				item.setAdded(c.getString(c.getColumnIndex(KEY_ADDED_TO_GROCERIES)));
@@ -659,14 +662,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		return items;
 	}
-
-	public List<Item> getItemsOf(String vendor_name) {
+	
+	public List<Item> getItemsAtMarket(long market_id) {
+		Log.i(TAG, "getItemsAtMarket()");
+		SQLiteDatabase db = this.getReadableDatabase();
+		List<Vendor> vendors= getAllVendorsAtMarket(market_id);
+		List<Item> items = new ArrayList<Item>();
+		for (int i = 0; i < vendors.size(); i++){
+			long vendor_id = vendors.get(i).getId();
+			items.addAll(getItemsAtVendor(vendor_id));
+		}
+		
+		return items;
+	}
+	
+	public List<Item> getItemsAtVendor(long vendor_id) {
 		Log.i(TAG, "getItemsOf()");
 		SQLiteDatabase db = this.getReadableDatabase();
 		List<Item> items = new ArrayList<Item>();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE "
-				+ KEY_VENDOR + " = " + vendor_name;
+				+ KEY_VENDOR_ID + " = " + vendor_id;
 
 		Log.e(TAG, selectQuery);
 
@@ -681,13 +697,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				item.setType(c.getString(c.getColumnIndex(KEY_TYPE)));
 				item.setPrice(c.getString(c.getColumnIndex(KEY_PRICE)));
 				item.setUnit(c.getString(c.getColumnIndex(KEY_UNIT)));
-				item.setVendor(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+				item.setVendorId(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+				item.setVendorName(c.getString(c.getColumnIndex(KEY_VENDOR_NAME)));
 				item.setSeasonStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
 				item.setSeasonEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
 				item.setAdded(c.getString(c.getColumnIndex(KEY_ADDED_TO_GROCERIES)));
 				item.setPhoto(c.getString(c.getColumnIndex(KEY_PHOTO)));
 
-				// adding to Market list
+				// adding to Items list
+				items.add(item);
+			} while (c.moveToNext());
+		} /*else {
+			Item item = new Item();
+			item.setName("Add new Item first");
+			items.add(item);
+		}*/
+
+		return items;
+	}
+
+	public List<Item> getItemsOf(String looking_for, String key) {
+		Log.i(TAG, "getItemsOf()");
+		SQLiteDatabase db = this.getReadableDatabase();
+		List<Item> items = new ArrayList<Item>();
+
+		String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE "
+				+ key + " = " + looking_for;
+
+		Log.e(TAG, selectQuery);
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				Item item = new Item();
+				item.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
+				item.setName(c.getString(c.getColumnIndex(KEY_ITEM_NAME)));
+				item.setType(c.getString(c.getColumnIndex(KEY_TYPE)));
+				item.setPrice(c.getString(c.getColumnIndex(KEY_PRICE)));
+				item.setUnit(c.getString(c.getColumnIndex(KEY_UNIT)));
+				item.setVendorId(c.getLong(c.getColumnIndex(KEY_VENDOR_ID)));
+				item.setVendorName(c.getString(c.getColumnIndex(KEY_VENDOR_NAME)));
+				item.setSeasonStart(c.getString(c.getColumnIndex(KEY_START_DATE)));
+				item.setSeasonEnd(c.getString(c.getColumnIndex(KEY_END_DATE)));
+				item.setAdded(c.getString(c.getColumnIndex(KEY_ADDED_TO_GROCERIES)));
+				item.setPhoto(c.getString(c.getColumnIndex(KEY_PHOTO)));
+
+				// adding to Items list
 				items.add(item);
 			} while (c.moveToNext());
 		} else {
@@ -720,10 +777,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					KEY_PRICE, //3
 					KEY_UNIT, //4
 					KEY_VENDOR_ID, //5
-					KEY_START_DATE, //6
-					KEY_END_DATE, //7
-					KEY_ADDED_TO_GROCERIES, //8
-					KEY_PHOTO //9
+					KEY_VENDOR_NAME, //6
+					KEY_START_DATE, //7
+					KEY_END_DATE, //8
+					KEY_ADDED_TO_GROCERIES, //9
+					KEY_PHOTO //10
 			};
 
 			Cursor cursor = db.query(TABLE_ITEMS,projection,selection,selectionArgs,null,null,sortOrder);
@@ -734,7 +792,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Group group = new Group(category);
 				do {
 					//Include items in the group if they are added to the grocery list.
-					if (cursor.getString(8).equals("yes")) {
+					if (cursor.getString(9).equals("yes")) {
 						group.children.add(new Item(
 								cursor.getLong(0), 
 								cursor.getString(1), 
@@ -745,7 +803,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 								cursor.getString(6), 
 								cursor.getString(7), 
 								cursor.getString(8),
-								cursor.getString(9)));
+								cursor.getString(9),
+								cursor.getString(10)));
 						Log.v(TAG, "item retrieved = " +cursor.getString(1));
 					} else {
 						Log.v(TAG, "skipping item = " + cursor.getString(1));
@@ -790,8 +849,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public boolean updateItem(long rowId, String added) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(FeedEntry.COLUMN_NAME_Added, added);
-		return db.update(FeedEntry.TABLE_NAME_I, values, FeedEntry._ID + "=" + rowId, null) > 0;
+		values.put(KEY_ADDED_TO_GROCERIES, added);
+		return db.update(TABLE_ITEMS, values, KEY_ID + "=" + rowId, null) > 0;
 	}
 
 	/*

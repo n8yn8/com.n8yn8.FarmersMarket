@@ -46,6 +46,7 @@ public class InventoryFragment extends Fragment {
 	private DatabaseHelper db;
 	boolean seasonalOnly;
 
+	List<Item> items;
 	ListView list;
 	Spinner vendorSpin;
 	
@@ -108,11 +109,10 @@ public void loadVendors(){
 		}
 		
 		// Get all of the rows from the database and create the item list
-		List<Item> items;
 		if(vendor==null)
 			items = db.getAllItems();
 		else
-			items = db.getItemsOf(vendor.getName());
+			items = db.getItemsOf(vendor.getName(), db.KEY_VENDOR_NAME);
 		
 		ItemListAdapter listAdapter = new ItemListAdapter(this.getActivity(), items);
 		list.setAdapter(listAdapter);
@@ -121,8 +121,8 @@ public void loadVendors(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Intent i = new Intent(getActivity(), EditItem.class);
-				i.putExtra(FeedEntry._ID, id);
-				startActivity(i);
+				i.putExtra(FeedEntry._ID, items.get((int) id).get_ID());
+				startActivityForResult(i, ACTIVITY_EDIT);
 			}
 		});
 		registerForContextMenu(list);
@@ -148,13 +148,13 @@ public void loadVendors(){
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch(item.getItemId()) {
 		case DELETE_ID:
-			db.deleteItem(info.id);
+			db.deleteItem(items.get((int) info.id).get_ID());
 			loadVendors();
 			return true;
 		case EDIT_ID:
 			Intent i = new Intent(this.getActivity(), EditItem.class);
-			i.putExtra(FeedEntry._ID, info.id);
-			Log.v(TAG, ""+info.id);
+			i.putExtra(FeedEntry._ID, items.get((int) info.id).get_ID());
+			Log.v(TAG, "item to edit = "+items.get((int) info.id).getName());
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;
 		}

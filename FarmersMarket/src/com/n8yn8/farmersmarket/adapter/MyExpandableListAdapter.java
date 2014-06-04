@@ -65,10 +65,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 						boolean isChecked) {
 					Item element = (Item) viewHolder.checkbox
 							.getTag();
-					if(buttonView.isChecked())
-						element.setAdded("yes");
-					else
-						element.setAdded("no");
+					element.setSelected(buttonView.isChecked());
 				}
 			});
 			view.setTag(viewHolder);
@@ -82,9 +79,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 		Log.v(TAG, "getChildView child name = " + child.getName());
 		holder.price.setText(child.getPrice());
 		holder.unit.setText(child.getUnit());
-		holder.vendor.setText(child.getVendor());
+		holder.vendor.setText(child.getVendorName());
 		holder.checkbox.setFocusable(false);
-		holder.checkbox.setChecked(child.isAdded());
+		holder.checkbox.setChecked(child.isSelected());
 		return view;
 
 		/*Model children = getChild(groupPosition, childPosition);
