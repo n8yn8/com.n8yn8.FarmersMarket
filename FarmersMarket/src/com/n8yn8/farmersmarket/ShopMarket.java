@@ -5,11 +5,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +21,6 @@ import android.widget.Toast;
 import com.n8yn8.farmersmarket.adapter.ItemCheckListAdapter;
 import com.n8yn8.farmersmarket.models.DatabaseHelper;
 import com.n8yn8.farmersmarket.models.Item;
-import com.n8yn8.farmersmarket.models.Market;
-import com.n8yn8.farmersmarket.models.Vendor;
 
 public class ShopMarket extends Activity {
 	
@@ -79,7 +75,6 @@ public class ShopMarket extends Activity {
 
 			public void onClick(View view) {
 				List<Item> items = adapter.items;
-				ArrayList<Long> item_ids = new ArrayList<Long>();
 				for (int i = 0; i < items.size(); i++) {
 					Item item = items.get(i);
 					if (item.isSelected()) {
@@ -110,10 +105,10 @@ public class ShopMarket extends Activity {
         
 		//For use with InteractiveArrayAdapter
 		items = new ArrayList<Item>();
-		Cursor itemCursor;
 		if(category==null)
 			items = db.getItemsAtMarket(marketId);
 		else
+			//TODO
 			items = db.getItemsOf(category, db.KEY_TYPE);
 		adapter = new ItemCheckListAdapter(this, items);
 		

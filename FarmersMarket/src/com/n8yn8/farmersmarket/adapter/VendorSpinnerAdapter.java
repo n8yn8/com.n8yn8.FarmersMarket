@@ -17,11 +17,13 @@ public class VendorSpinnerAdapter extends ArrayAdapter<Vendor>{
     private Context context;
     // Your custom values for the spinner (User)
     private List<Vendor> values;
+    private int textViewResourceId;
 
     public VendorSpinnerAdapter(Context context, int textViewResourceId,
     		List<Vendor> values) {
         super(context, textViewResourceId, values);
         this.context = context;
+        this.textViewResourceId = textViewResourceId;
         this.values = values;
     }
 

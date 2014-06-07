@@ -1,6 +1,5 @@
 package com.n8yn8.farmersmarket.fragments;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,9 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
-import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.adapter.MyExpandableListAdapter;
 import com.n8yn8.farmersmarket.models.DatabaseHelper;
@@ -50,7 +47,7 @@ public class GroceryListFragment extends Fragment {
 		Button removeItems = (Button) rootView.findViewById(R.id.remove);
 
 		List<String> categories = Arrays.asList(getResources().getStringArray(R.array.categories_array));
-		fillData(categories, FeedEntry.COLUMN_NAME_Type);
+		fillDataByTypes(categories);
 
 		removeItems.setOnClickListener(new View.OnClickListener() {
 
@@ -139,29 +136,28 @@ public class GroceryListFragment extends Fragment {
 
 			if(rb1.isChecked()){
 				List<String> types = Arrays.asList(getResources().getStringArray(R.array.categories_array));
-				fillData(types, FeedEntry.COLUMN_NAME_Type);
+				fillDataByTypes(types);
 			} else {
 				List<Vendor> vendors = db.getAllVendors();
-				Toast.makeText(getActivity(), "Work in progress", Toast.LENGTH_SHORT).show();;
-				//TODO make sort by vendors work.
-				/*
-        		List<String> vendors = new ArrayList<String>();
-				Cursor vCursor = mVDbHelper.getAllVendors();
-				if(vCursor.moveToFirst()){
-					do {
-						vendors.add(vCursor.getPosition(), vCursor.getString(1));
-					} while (vCursor.moveToNext());
-				}
-				fillData(vendors, FeedEntry.COLUMN_NAME_Vendor);
-				 */
+				fillDataByVendors(vendors);
 			}
 
 		}
 	};
 
-	private void fillData(List<String> categories, String column) {
+	private void fillDataByTypes(List<String> categories) {
 		Log.i(TAG, "fillData");
-		groups = db.getItemsOf(categories, column, db.KEY_ITEM_NAME);
+		groups = db.getGroceriesByType(categories);
+		setGroceryList(groups);
+	}
+	
+	private void fillDataByVendors(List<Vendor> vendors) {
+		Log.i(TAG, "fillData");
+		groups = db.getGroceriesByVendor(vendors);
+		setGroceryList(groups);
+	}
+	
+	private void setGroceryList(SparseArray<Group> groups) {
 		adapter = new MyExpandableListAdapter(this.getActivity(), groups);
 		listView.setAdapter(adapter);
 	}

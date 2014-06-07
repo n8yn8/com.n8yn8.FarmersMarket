@@ -36,8 +36,8 @@
     <array name="nav_drawer_icons">
         <item>@drawable/ic_add_item</item>
         <item>@drawable/ic_add_vendor</item>
-        <item>@drawable/ic_add_vendor</item>
-        <item>@drawable/ic_add_vendor</item>
+        <item>@drawable/ic_vendor</item>
+        <item>@drawable/ic_item</item>
     </array>
     
     <!-- Content Description -->

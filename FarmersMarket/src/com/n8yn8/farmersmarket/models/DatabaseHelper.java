@@ -13,8 +13,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.n8yn8.farmersmarket.Contract.FeedEntry;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// Logcat tag
@@ -722,7 +720,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<Item> items = new ArrayList<Item>();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE "
-				+ key + " = " + looking_for;
+				+ key + " = \"" + looking_for + "\"";
 
 		Log.e(TAG, selectQuery);
 
@@ -755,8 +753,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		return items;
 	}
+	
+	
 
-	public SparseArray<Group> getItemsOf(List<String> categories, String column, String sortBy){
+	public SparseArray<Group> getGroceriesByType(List<String> categories){
 		Log.i(TAG, "getItemsOf");
 		
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -765,10 +765,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		int groupID = 0;
 		for(int i = 1; i < categories.size(); i++){
 			String category = categories.get(i);
-			Log.v(TAG, "category = " + category + ", column = " + column + ", sorted by = " +sortBy);
+			Log.v(TAG, "category = " + category + ", column = " + KEY_TYPE + ", sorted by = " +KEY_ITEM_NAME);
 			
-			String sortOrder = sortBy + " DESC";
-			String selection = column + " LIKE ?";
+			String sortOrder = KEY_ITEM_NAME + " DESC";
+			String selection = KEY_TYPE + " LIKE ?";
 			String[] selectionArgs = { category };
 			String[] projection = {
 					KEY_ID, //0
@@ -790,6 +790,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Log.i(TAG, "cursor moved to first");
 				//Add children to the group.
 				Group group = new Group(category);
+				do {
+					//Include items in the group if they are added to the grocery list.
+					if (cursor.getString(9).equals("yes")) {
+						group.children.add(new Item(
+								cursor.getLong(0), 
+								cursor.getString(1), 
+								cursor.getString(2), 
+								cursor.getString(3), 
+								cursor.getString(4), 
+								cursor.getLong(5),
+								cursor.getString(6), 
+								cursor.getString(7), 
+								cursor.getString(8),
+								cursor.getString(9),
+								cursor.getString(10)));
+						Log.v(TAG, "item retrieved = " +cursor.getString(1));
+					} else {
+						Log.v(TAG, "skipping item = " + cursor.getString(1));
+					}
+				} while (cursor.moveToNext());
+				//Include the group if it contains children.
+				if(!group.childrenEmpty()){
+					group.updateGroupCount();
+					groups.put(groupID, group);
+					groupID++;
+				}
+			}
+		}
+
+		return groups;
+	}
+	
+	public SparseArray<Group> getGroceriesByVendor(List<Vendor> vendors){
+		Log.i(TAG, "getItemsOf");
+		
+		SQLiteDatabase db = this.getReadableDatabase();
+		SparseArray<Group> groups = new SparseArray<Group>();
+
+		int groupID = 0;
+		for(int i = 1; i < vendors.size(); i++){
+			Vendor vendor = vendors.get(i);
+			String selectQuery = "SELECT  * FROM " + TABLE_ITEMS + " WHERE "
+					+ KEY_VENDOR_ID + " = " + vendor.getId();
+
+			Log.e(TAG, selectQuery);
+
+			Cursor cursor = db.rawQuery(selectQuery, null);
+
+			if (cursor.moveToFirst()) {
+				Log.i(TAG, "cursor moved to first");
+				//Add children to the group.
+				Group group = new Group(vendor.getName());
 				do {
 					//Include items in the group if they are added to the grocery list.
 					if (cursor.getString(9).equals("yes")) {
