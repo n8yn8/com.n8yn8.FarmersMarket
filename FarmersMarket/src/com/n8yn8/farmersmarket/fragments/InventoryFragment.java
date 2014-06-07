@@ -3,17 +3,18 @@ package com.n8yn8.farmersmarket.fragments;
 import java.util.Calendar;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -85,14 +86,11 @@ public void loadVendors(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 					Vendor vendor = spinAdapter.getVendor(position);
-					//TODO switch null to vendor
-					fillData(null);
+					fillData(vendor);
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 	}
@@ -165,7 +163,7 @@ public void loadVendors(){
 		public void onClick(View view) {
 			Log.i(TAG, "onClick addItem");
 			Intent intent = new Intent(getActivity(), EditItem.class);
-			startActivityForResult(intent, ACTIVITY_CREATE_VENDOR);
+			startActivityForResult(intent, ACTIVITY_CREATE_ITEM);
 		}
 	};
 
@@ -185,6 +183,8 @@ public void loadVendors(){
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		Log.i(TAG, "onActivityResult");
 		super.onActivityResult(requestCode, resultCode, intent);
-		loadVendors();
+		if(resultCode == Activity.RESULT_OK){
+			loadVendors();
+		}
 	}
 }

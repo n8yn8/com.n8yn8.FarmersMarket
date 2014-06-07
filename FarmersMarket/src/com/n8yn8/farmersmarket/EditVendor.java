@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,11 +16,12 @@ import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.adapter.MarketCheckListAdapter;
+import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
 import com.n8yn8.farmersmarket.models.DatabaseHelper;
 import com.n8yn8.farmersmarket.models.Market;
 import com.n8yn8.farmersmarket.models.Vendor;
 
-public class EditVendor extends Activity {
+public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDialogListener {
 	
 	private String TAG = "EditVendor";
 	private DatabaseHelper db;
@@ -43,6 +45,7 @@ public class EditVendor extends Activity {
 		isOrganic = (CheckBox) findViewById(R.id.check_organic);
 		
 		Button confirmButton = (Button) findViewById(R.id.saveVendor);
+		Button deleteButton = (Button) findViewById(R.id.deleteVendor);
 
 		mRowId = (savedInstanceState == null) ? null :
 			(Long) savedInstanceState.getSerializable(FeedEntry._ID);
@@ -57,10 +60,22 @@ public class EditVendor extends Activity {
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {
-				setResult(RESULT_OK);
-				finish();
+				Log.d(TAG, "itemName on Save button = "+vendorNameField.getText().toString());
+				if(saveState()) {
+					setResult(RESULT_OK);
+					finish();
+				} else {
+					showNoticeDialog();
+				}
 			}
 
+		});
+
+		deleteButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View veiw){
+				deleteState();
+			}
 		});
 	}
 
@@ -100,7 +115,7 @@ public class EditVendor extends Activity {
 		populateFields();
 	}
 
-	private void saveState() {
+	private boolean saveState() {
 		String vendorName = vendorNameField.getText().toString();
 		Vendor vendor;
 		List<Market> markets = marketAdapter.markets;
@@ -123,6 +138,16 @@ public class EditVendor extends Activity {
 			db.updateVendor(vendor);
 			//TODO update vendor at markets.
 		}
+		return (!vendorName.equals(""));
+	}
+	
+	private void deleteState() {
+		setResult(RESULT_CANCELED);
+		if(mRowId != null){
+			Log.d(TAG, "mRowId to delete = "+mRowId);
+			db.deleteItem(mRowId);
+		}
+		finish();
 	}
 
 	public void onCheckboxClicked(View view) {
@@ -146,5 +171,24 @@ public class EditVendor extends Activity {
 		getMenuInflater().inflate(R.menu.edit_vendor, menu);
 		return true;
 	}
+	
+	public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new NoNameAlertFragment();
+        dialog.show(getFragmentManager(), "NoticeDialogFragment");
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.d(TAG, "Positive button pressed");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+    	deleteState();
+    }
 
 }

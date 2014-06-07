@@ -113,8 +113,8 @@ public class VendorListFragment extends Fragment {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.add(0, DELETE_ID, 0, R.string.menu_delete);
-		menu.add(0, EDIT_ID, 0, R.string.menu_edit);
+		menu.add(0, DELETE_ID, 0, "Delete Vendor");
+		menu.add(0, EDIT_ID, 0, "Edit Vendor");
 	}
 
 	@Override

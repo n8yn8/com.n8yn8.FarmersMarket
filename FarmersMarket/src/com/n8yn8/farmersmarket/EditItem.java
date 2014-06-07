@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,11 +31,12 @@ import android.widget.Spinner;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.adapter.VendorSpinnerAdapter;
+import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
 import com.n8yn8.farmersmarket.models.DatabaseHelper;
 import com.n8yn8.farmersmarket.models.Item;
 import com.n8yn8.farmersmarket.models.Vendor;
 
-public class EditItem extends Activity {
+public class EditItem extends Activity implements NoNameAlertFragment.NoticeDialogListener {
 	private static final String TAG = "EditItem";
 	
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
@@ -72,7 +74,7 @@ public class EditItem extends Activity {
 		isAdded = (CheckBox) findViewById(R.id.addToGroceries);
 		added = "no";
 		Button confirmButton = (Button) findViewById(R.id.saveItem);
-		//Button deleteButton = (Button) findViewById(R.id.deleteItem);
+		Button deleteButton = (Button) findViewById(R.id.deleteItem);
 		
 		// Get max available VM memory, exceeding this amount will throw an
 	    // OutOfMemory exception. Stored in kilobytes as LruCache takes an
@@ -114,20 +116,23 @@ public class EditItem extends Activity {
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {
-				setResult(RESULT_OK);
-				finish();
+				Log.d(TAG, "itemName on Save button = "+itemName.getText().toString());
+				if(saveState()) {
+					setResult(RESULT_OK);
+					finish();
+				} else {
+					showNoticeDialog();
+				}
 			}
 
 		});
 
-		/*deleteButton.setOnClickListener(new View.OnClickListener() {
+		deleteButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View veiw){
-				setResult(RESULT_CANCELED);
-				mItemDbHelper.deleteItem(mRowId);
-				finish();
+				deleteState();
 			}
-		});*/
+		});
 	}
 
 	private void initializeSpinners() {
@@ -248,7 +253,6 @@ public class EditItem extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		saveState();
 	}
 
 	@Override
@@ -257,7 +261,7 @@ public class EditItem extends Activity {
 		initializeSpinners();
 	}
 
-	private void saveState() {
+	private boolean saveState() {
 		name = itemName.getText().toString();
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
@@ -273,6 +277,16 @@ public class EditItem extends Activity {
 			item.set_ID(mRowId);
 			db.updateItem(item);
 		}
+		return (!name.equals(""));
+	}
+	
+	private void deleteState() {
+		setResult(RESULT_CANCELED);
+		if(mRowId != null){
+			Log.d(TAG, "mRowId to delete = "+mRowId);
+			db.deleteItem(mRowId);
+		}
+		finish();
 	}
 
 	@Override
@@ -296,6 +310,25 @@ public class EditItem extends Activity {
 			break;
 		}
 	}
+	
+	public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+        DialogFragment dialog = new NoNameAlertFragment();
+        dialog.show(getFragmentManager(), "NoticeDialogFragment");
+    }
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.d(TAG, "Positive button pressed");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+    	deleteState();
+    }
 
 	public void takePic(View v){
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
