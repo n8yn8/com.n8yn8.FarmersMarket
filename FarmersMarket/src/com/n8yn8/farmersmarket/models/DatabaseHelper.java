@@ -748,6 +748,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		} else {
 			Item item = new Item();
 			item.setName("Add new Item first");
+			item.setAdded("no");
 			items.add(item);
 		}
 

@@ -56,14 +56,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 				mRowId = extras.getLong(FeedEntry._ID);
 			}
 		}
-		/*
-		mRowId = (savedInstanceState == null) ? null :
-			(Long) savedInstanceState.getSerializable(FeedEntry._ID);
-		if (mRowId == null) {
-			Bundle extras = getIntent().getExtras();
-			mRowId = extras != null ? extras.getLong(FeedEntry._ID)
-					: null;
-		}*/
+		
     	populateFields();
     	
     	confirmButton.setOnClickListener(new View.OnClickListener() {
