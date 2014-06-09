@@ -124,7 +124,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 			Market market = markets.get(i);
 			if (market.isSelected()) {
 				Log.v(TAG + "Selected", market.getName());
-				market_ids.add(market.getId());
+				market_ids.add(market.get_ID());
 			}
 		}
 		if (mRowId == null) {

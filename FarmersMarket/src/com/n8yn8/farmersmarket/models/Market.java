@@ -38,11 +38,11 @@ public class Market {
 		this.close = close;
 	}
 
-	public long getId() {
+	public long get_ID() {
 		return _ID;
 	}
 
-	public void setId(long id) {
+	public void set_ID(long id) {
 		this._ID = id;
 	}
 

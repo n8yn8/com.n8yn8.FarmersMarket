@@ -46,8 +46,7 @@
         	    android:id="@+id/checkMon"
         	    android:layout_width="wrap_content"
         	    android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked" />
+        	    android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
         
@@ -69,8 +68,7 @@
             	android:id="@+id/checkTue"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked"/>
+        	    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
         
         <LinearLayout
@@ -91,8 +89,7 @@
             	android:id="@+id/checkWed"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked" />
+        	    android:layout_gravity="center_horizontal" />
         </LinearLayout>
         
         <LinearLayout
@@ -113,8 +110,7 @@
             	android:id="@+id/checkThu"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked"/>
+        	    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
         
         <LinearLayout
@@ -135,8 +131,7 @@
             	android:id="@+id/checkFri"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked"/>
+        	    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
         
         <LinearLayout
@@ -157,8 +152,7 @@
             	android:id="@+id/checkSat"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked"/>
+        	    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
         
         <LinearLayout
@@ -179,8 +173,7 @@
             	android:id="@+id/checkSun"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-        	    android:layout_gravity="center_horizontal"
-        	    android:onClick="onCheckboxClicked"/>
+        	    android:layout_gravity="center_horizontal"/>
         </LinearLayout>
 
     </LinearLayout>

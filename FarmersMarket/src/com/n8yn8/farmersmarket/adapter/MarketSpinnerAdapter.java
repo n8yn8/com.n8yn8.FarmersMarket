@@ -34,7 +34,7 @@ public class MarketSpinnerAdapter extends ArrayAdapter<Market>{
     }
 
     public long getMarketId(int position){
-       return values.get(position).getId();
+       return values.get(position).get_ID();
     }
 
 

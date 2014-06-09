@@ -69,7 +69,7 @@ public class MarketListFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				market = (Market) marketsAdapter.getMarket(position);
-				startShopping(market.getId());				
+				startShopping(market.get_ID());				
 			}
 		});
 	}
@@ -93,12 +93,12 @@ public class MarketListFragment extends Fragment {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch(item.getItemId()) {
 		case DELETE_ID:
-			db.deleteMarket(markets.get((int) info.id).getId());
+			db.deleteMarket(markets.get((int) info.id).get_ID());
 			fillData();
 			return true;
 		case EDIT_ID:
 			Intent i = new Intent(this.getActivity(), EditMarket.class);
-			i.putExtra(FeedEntry._ID, markets.get((int) info.id).getId());
+			i.putExtra(FeedEntry._ID, markets.get((int) info.id).get_ID());
 			i.putExtra("new_market", "false");
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;

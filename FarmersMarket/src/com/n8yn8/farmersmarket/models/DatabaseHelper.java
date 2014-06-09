@@ -187,7 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 
 		Market market = new Market();
-		market.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+		market.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
 		market.setName(c.getString(c.getColumnIndex(KEY_MARKET_NAME)));
 		market.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
 		market.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -215,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Market market = new Market();
-				market.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+				market.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
 				market.setName(c.getString(c.getColumnIndex(KEY_MARKET_NAME)));
 				market.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
 				market.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -278,7 +278,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Market market = new Market();
-				market.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+				market.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
 				market.setName(c.getString(c.getColumnIndex(KEY_MARKET_NAME)));
 				market.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
 				market.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -329,7 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		// updating row
 		return db.update(TABLE_MARKETS, values, KEY_ID + " = ?",
-				new String[] { String.valueOf(market.getId()) });
+				new String[] { String.valueOf(market.get_ID()) });
 	}
 
 	/*
@@ -346,7 +346,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Log.i(TAG, "constructMarket()");
 
 		Market market = new Market();
-		market.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+		market.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
 		market.setName(c.getString(c.getColumnIndex(KEY_MARKET_NAME)));
 		market.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
 		market.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -458,7 +458,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Market market = new Market();
-				market.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+				market.set_ID(c.getInt(c.getColumnIndex(KEY_ID)));
 				market.setName(c.getString(c.getColumnIndex(KEY_MARKET_NAME)));
 				market.setLatitude(c.getDouble(c.getColumnIndex(KEY_LATITUDE)));
 				market.setLongitude(c.getDouble(c.getColumnIndex(KEY_LONGITUDE)));
@@ -467,7 +467,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				market.setClose(c.getString(c.getColumnIndex(KEY_CLOSE)));
 
 				secondSelectQuery = "SELECT  * FROM " + TABLE_VENDORS_AT_MARKETS + " WHERE "
-						+ KEY_MARKET_ID + " = " + market.getId() + " AND " + KEY_VENDOR_ID + " = " + vendor_id;
+						+ KEY_MARKET_ID + " = " + market.get_ID() + " AND " + KEY_VENDOR_ID + " = " + vendor_id;
 				Cursor c2 = db.rawQuery(secondSelectQuery, null);
 				if (c2.moveToFirst()){
 					do {

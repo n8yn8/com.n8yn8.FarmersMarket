@@ -101,7 +101,7 @@ public class VendorListFragment extends Fragment {
 			vendors = db.getAllVendors();
 			Log.v(TAG, "fillData() get all vendors");
 		} else {
-			vendors = db.getAllVendorsAtMarket(chosenMarket.getId());
+			vendors = db.getAllVendorsAtMarket(chosenMarket.get_ID());
 			Log.v(TAG, "fillData() get vendors at "+chosenMarket.getName());
 		}
 		VendorListAdapter vendorAdapter = new VendorListAdapter(getActivity(), vendors);
