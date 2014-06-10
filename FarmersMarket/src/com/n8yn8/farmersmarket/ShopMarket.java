@@ -161,14 +161,20 @@ public class ShopMarket extends Activity {
 		switch(item.getItemId()) {
 		case R.id.add_item:
 			Intent newItem = new Intent(this, EditItem.class);
-			startActivity(newItem);
+			startActivityForResult(newItem, ACTIVITY_CREATE);
 			return true;
 		case R.id.add_vendor:
 			Intent newVendor = new Intent(this, EditVendor.class);
-			startActivity(newVendor);
+			startActivityForResult(newVendor, ACTIVITY_CREATE);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		fillData(null);
 	}
 	
 	

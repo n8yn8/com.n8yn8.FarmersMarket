@@ -794,6 +794,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 				// adding to Items list
 				items.add(item);
+				Log.d(TAG, "Item added = " + item.getName());
 			} while (c.moveToNext());
 		} /*else {
 			Item item = new Item();
@@ -863,7 +864,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				} while (cursor.moveToNext());
 				//Include the group if it contains children.
 				if(!group.childrenEmpty()){
-					group.updateGroupCount();
+					//group.updateGroupCount();
 					groups.put(groupID, group);
 					groupID++;
 				}
@@ -915,7 +916,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				} while (cursor.moveToNext());
 				//Include the group if it contains children.
 				if(!group.childrenEmpty()){
-					group.updateGroupCount();
+					//group.updateGroupCount();
 					groups.put(groupID, group);
 					groupID++;
 				}

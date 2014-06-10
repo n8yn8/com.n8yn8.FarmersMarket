@@ -15,11 +15,11 @@ public class Group {
 		Log.i(TAG, "constructor, string = " + string);
 		this.string = string;
 	}
-	
+	/*
 	public void updateGroupCount(){
 		this.string = this.string + " (" + childrenCount() + ")";
 	}
-	
+	*/
 	public boolean childrenEmpty(){
 		Log.v(TAG, "childrenEmpty = " + children.isEmpty());
 		return children.isEmpty();

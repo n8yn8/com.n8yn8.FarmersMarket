@@ -69,7 +69,7 @@ public class GroceryListFragment extends Fragment {
 							children.remove(j);
 						}
 					}
-					group.updateGroupCount();
+					//group.updateGroupCount();
 					if (group.childrenEmpty()) {
 						groups.remove(i);
 					}
