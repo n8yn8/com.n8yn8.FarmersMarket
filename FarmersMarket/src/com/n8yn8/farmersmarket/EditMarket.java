@@ -104,9 +104,9 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
             closeTime.setText(market.getClose());
             location = new LatLng(market.getLatitude(), market.getLongitude());
             String daysOpen = market.getDays();
-            List<String> items = Arrays.asList(daysOpen.split("\\s+"));
-            for(int i = 0; i < items.size(); i++) {
-            	String day = items.get(i);
+            List<String> daysOpenArray = Arrays.asList(daysOpen.split("\\s+"));
+            for(int i = 0; i < daysOpenArray.size(); i++) {
+            	String day = daysOpenArray.get(i);
             	if(day.equals("Mo")){
             		daysCheckBoxes.get(0).setChecked(true);
             	} else if(day.equals("Tu")){
@@ -123,7 +123,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
             		daysCheckBoxes.get(6).setChecked(true);
             	}
             }
-            Log.d(TAG, items.toString());
+            Log.d(TAG, daysOpenArray.toString());
         }
     }
 	
@@ -176,7 +176,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 		Double lat = location.latitude;
 		Double lng = location.longitude;
 		String daysOpen = "";
-		for(int i = 0;  i < 6; i++){
+		for(int i = 0;  i < 7; i++){
 			if (daysCheckBoxes.get(i).isChecked()){
 				daysOpen += week[i];
 			}

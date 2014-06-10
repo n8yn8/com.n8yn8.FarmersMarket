@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.adapter.NavDrawerListAdapter;
 import com.n8yn8.farmersmarket.fragments.GroceryListFragment;
-import com.n8yn8.farmersmarket.fragments.InventoryFragment;
+import com.n8yn8.farmersmarket.fragments.ItemListFragment;
 import com.n8yn8.farmersmarket.fragments.MarketListFragment;
 import com.n8yn8.farmersmarket.fragments.VendorListFragment;
 import com.n8yn8.farmersmarket.models.NavDrawerItem;
@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.market_list, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
@@ -135,10 +135,6 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {
         case R.id.action_settings:
             return true;
-        case R.id.map_view:
-			Intent intent = new Intent(this, MarketsMap.class);
-			startActivity(intent);
-			
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -210,7 +206,7 @@ public class MainActivity extends Activity {
         	fragment = new VendorListFragment();
             break;
         case 3:
-        	fragment = new InventoryFragment();
+        	fragment = new ItemListFragment();
             break;
         /*case 4:
             fragment = new PagesFragment();

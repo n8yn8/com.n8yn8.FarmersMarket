@@ -12,6 +12,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +23,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.EditItem;
 import com.n8yn8.farmersmarket.EditVendor;
+import com.n8yn8.farmersmarket.MarketsMap;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.adapter.ItemListAdapter;
 import com.n8yn8.farmersmarket.adapter.VendorSpinnerAdapter;
@@ -33,60 +36,98 @@ import com.n8yn8.farmersmarket.models.DatabaseHelper;
 import com.n8yn8.farmersmarket.models.Item;
 import com.n8yn8.farmersmarket.models.Vendor;
 
-public class InventoryFragment extends Fragment {
-	
+public class ItemListFragment extends Fragment {
+
 	private String TAG = "InventoryFragment";
-	
-	private static final int ACTIVITY_CREATE_ITEM=0;
+
+	private static final int ACTIVITY_CREATE=0;
 	private static final int ACTIVITY_CREATE_VENDOR=1;
 	private static final int ACTIVITY_EDIT=2;
 
 	private static final int DELETE_ID = Menu.FIRST;
 	private static final int EDIT_ID = Menu.FIRST +1;
-	
+
 	private DatabaseHelper db;
 	boolean seasonalOnly;
 
 	List<Item> items;
+	TextView noItems;
 	ListView list;
 	Spinner vendorSpin;
-	
-	public InventoryFragment(){}
-	
+
+	public ItemListFragment(){}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.i(TAG, "onCreatView");
-		View rootView = inflater.inflate(R.layout.activity_inventory, container, false);
+		View rootView = inflater.inflate(R.layout.activity_item_list, container, false);
 		vendorSpin=(Spinner)rootView.findViewById(R.id.vendor_spinner);
+		noItems = (TextView)rootView.findViewById(R.id.no_items);
 		list=(ListView)rootView.findViewById(R.id.item_list);
 		Button newItem = (Button) rootView.findViewById(R.id.new_item);
 		newItem.setOnClickListener(addItem);
 		return rootView;
 	}
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Log.i(TAG, "onActivityCreated");
 		super.onActivityCreated(savedInstanceState);
 		db = new DatabaseHelper(this.getActivity());
+		setHasOptionsMenu(true);
 		loadVendors();	
 	}
-	
-public void loadVendors(){
-	Log.i(TAG, "loadVendors");
-		
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.add_bar, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		// Handle action bar actions click
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			return true;
+		case R.id.map_view:
+			intent = new Intent(this.getActivity(), MarketsMap.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+		case R.id.add_item:
+			intent = new Intent(this.getActivity(), EditItem.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+		case R.id.add_vendor:
+			intent = new Intent(this.getActivity(), EditVendor.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	public void loadVendors(){
+		Log.i(TAG, "loadVendors");
+
 		List<Vendor> vendors = db.getAllVendors();
 		//TODO "add vendor first" when no vendors.
 		final VendorSpinnerAdapter spinAdapter = new VendorSpinnerAdapter(this.getActivity(),
-                android.R.layout.simple_spinner_item, vendors);
+				android.R.layout.simple_spinner_item, vendors);
 		spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vendorSpin.setAdapter(spinAdapter);
 		vendorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				Log.i(TAG, "vendorSpin onItemSelected");
+				if(position==0){
+					fillData(null);
+				} else {
 					Vendor vendor = spinAdapter.getVendor(position);
 					fillData(vendor);
+				}
 			}
 
 			@Override
@@ -95,29 +136,40 @@ public void loadVendors(){
 		});
 	}
 
-	
+
 
 	private void fillData(Vendor vendor) {
-		
+
 		Log.i(TAG, "fillData");
-		
+
 		int month = Calendar.getInstance().get(Calendar.MONTH);
 		if(seasonalOnly){
 			//TODO
 		}
-		
+
+		noItems.setText("");
 		// Get all of the rows from the database and create the item list
-		if(vendor==null)
+		if(vendor==null) {
 			items = db.getAllItems();
-		else
+			if (items.size() == 0) {
+				noItems.setText("There are no items added yet.");
+				Log.d(TAG, "no items yet.");
+			}
+		} else {
 			items = db.getItemsOf(vendor.getName(), db.KEY_VENDOR_NAME);
-		
+			if (items.size() == 0) {
+				noItems.setText("There are no items added yet at this vendor.");
+				Log.d(TAG, "no items yet at this vendor");
+			}
+		}
+
 		ItemListAdapter listAdapter = new ItemListAdapter(this.getActivity(), items);
 		list.setAdapter(listAdapter);
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				Log.i(TAG, "listView onItemClick");
 				Intent i = new Intent(getActivity(), EditItem.class);
 				i.putExtra(FeedEntry._ID, items.get((int) id).get_ID());
 				startActivityForResult(i, ACTIVITY_EDIT);
@@ -125,7 +177,7 @@ public void loadVendors(){
 		});
 		registerForContextMenu(list);
 	}
-	
+
 	public void onToggleClicked(View view) {
 		Log.i(TAG, "onToggleClicked");
 		seasonalOnly = ((CheckBox) view).isChecked();
@@ -158,21 +210,21 @@ public void loadVendors(){
 		}
 		return super.onContextItemSelected(item);
 	}
-	
+
 	private OnClickListener addItem = new OnClickListener() {
 		public void onClick(View view) {
 			Log.i(TAG, "onClick addItem");
 			Intent intent = new Intent(getActivity(), EditItem.class);
-			startActivityForResult(intent, ACTIVITY_CREATE_ITEM);
+			startActivityForResult(intent, ACTIVITY_CREATE);
 		}
 	};
 
 	public void newItem() {
 		Log.i(TAG, "newItem");
 		Intent i = new Intent(this.getActivity(), EditItem.class);
-		startActivityForResult(i, ACTIVITY_CREATE_ITEM);
+		startActivityForResult(i, ACTIVITY_CREATE);
 	}
-	
+
 	public void newVendor(){
 		Log.i(TAG, "newVendor");
 		Intent i = new Intent(this.getActivity(), EditVendor.class);

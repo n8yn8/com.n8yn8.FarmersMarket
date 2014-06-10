@@ -145,7 +145,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 		setResult(RESULT_CANCELED);
 		if(mRowId != null){
 			Log.d(TAG, "mRowId to delete = "+mRowId);
-			db.deleteItem(mRowId);
+			db.deleteVendor(mRowId);
 		}
 		finish();
 	}

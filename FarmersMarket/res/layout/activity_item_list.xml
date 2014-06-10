@@ -17,18 +17,23 @@
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true" />
 
-    <CheckBox
+    <!-- <CheckBox
         android:id="@+id/in_season"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show in season"
-        android:onClick="onToggleClicked" />
+        android:onClick="onToggleClicked" /> -->
 
     <!-- <CheckBox
         android:id="@+id/organic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Organic Vendor" /> -->
+
+    <TextView
+        android:id="@+id/no_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/item_list"

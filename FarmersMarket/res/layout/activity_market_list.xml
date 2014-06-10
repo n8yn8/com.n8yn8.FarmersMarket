@@ -15,7 +15,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click the map icon to add a new market at a new location" />
+        android:paddingBottom="10dp"
+        android:text="Click the map icon to add a new market at a new location. Select a market to view items found at this market." />
 
     <ListView
         android:id="@+id/market_list"

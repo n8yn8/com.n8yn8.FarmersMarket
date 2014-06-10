@@ -61,6 +61,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i(TAG, "onCreate");
 		db = new DatabaseHelper(this);
 
 		setContentView(R.layout.activity_edit_item);
@@ -136,6 +137,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	}
 
 	private void initializeSpinners() {
+		Log.i(TAG, "initializeSpinners");
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		categorySpinner.setAdapter(categoryAdapter);
@@ -241,6 +243,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		Log.i(TAG, "onSaveInstanceState");
 		saveState();
 		outState.putSerializable(FeedEntry._ID, mRowId);
 	}
@@ -248,23 +251,33 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		Log.i(TAG, "onRestoreInstanceState");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Log.i(TAG, "onPause");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Log.i(TAG, "onResume");
 		initializeSpinners();
 	}
 
 	private boolean saveState() {
+		Log.i(TAG, "saveState");
 		name = itemName.getText().toString();
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
+		
+		if (isAdded.isChecked()){
+			added = "yes";
+		} else {
+			added = "no";
+		}
 		
 		Item item = new Item(name, category, price, unit, vendorId, vendorName, start, end, added, mCurrentPhotoPath);
 
@@ -281,6 +294,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	}
 	
 	private void deleteState() {
+		Log.i(TAG, "deleteState");
 		setResult(RESULT_CANCELED);
 		if(mRowId != null){
 			Log.d(TAG, "mRowId to delete = "+mRowId);
@@ -291,27 +305,14 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		Log.i(TAG, "onCreateOptionsMenu");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_item, menu);
 		return true;
 	}
-
-	public void onCheckboxClicked(View view) {
-		// Is the view now checked?
-		boolean checked = isAdded.isChecked();
-
-		// Check which checkbox was clicked
-		switch(view.getId()) {
-		case R.id.addToGroceries:
-			if (checked)
-				added = "yes";
-			else
-				added = "no";
-			break;
-		}
-	}
 	
 	public void showNoticeDialog() {
+		Log.i(TAG, "showNoticeDialog");
         // Create an instance of the dialog fragment and show it
         DialogFragment dialog = new NoNameAlertFragment();
         dialog.show(getFragmentManager(), "NoticeDialogFragment");
@@ -331,6 +332,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
     }
 
 	public void takePic(View v){
+		Log.i(TAG, "takePic");
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		File f = null;
 		try {
@@ -400,7 +402,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		Log.d("onActivityResult", "Result received");
+		Log.i(TAG, "onActivityResult");
 		if (requestCode == TAKE_PICTURE && resultCode==RESULT_OK){
 			if (mCurrentPhotoPath != null) {
 				saveBitmap();

@@ -11,6 +11,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,9 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.EditItem;
 import com.n8yn8.farmersmarket.EditVendor;
+import com.n8yn8.farmersmarket.MarketsMap;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.adapter.MarketSpinnerAdapter;
 import com.n8yn8.farmersmarket.adapter.VendorListAdapter;
@@ -47,6 +51,7 @@ public class VendorListFragment extends Fragment {
 	Spinner marketSpin;
 	List<Vendor> vendors;
 	Market chosenMarket;
+	TextView noVendors;
 	
 	public VendorListFragment (){}
 	
@@ -57,6 +62,7 @@ public class VendorListFragment extends Fragment {
 		marketSpin=(Spinner)rootView.findViewById(R.id.market_spinner);
 		Button newVendor = (Button) rootView.findViewById(R.id.new_vendor);
 		list=(ListView)rootView.findViewById(R.id.vendor_list);
+		noVendors = (TextView)rootView.findViewById(R.id.no_vendors);
 		loadMarkets();
 		newVendor.setOnClickListener(addVendor);
 		return rootView;
@@ -73,7 +79,38 @@ public class VendorListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		db = new DatabaseHelper(this.getActivity());
+		setHasOptionsMenu(true);
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.add_bar, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+        case R.id.action_settings:
+            return true;
+        case R.id.map_view:
+			intent = new Intent(this.getActivity(), MarketsMap.class);
+			startActivityForResult(intent, ACTIVITY_CREATE_ITEM);
+			return true;
+        case R.id.add_item:
+			intent = new Intent(this.getActivity(), EditItem.class);
+			startActivityForResult(intent, ACTIVITY_CREATE_ITEM);
+			return true;
+		case R.id.add_vendor:
+			intent = new Intent(this.getActivity(), EditVendor.class);
+			startActivityForResult(intent, ACTIVITY_CREATE_VENDOR);
+			return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
 	private void loadMarkets () {
 		List<Market> markets = db.getAllMarkets();
@@ -104,6 +141,8 @@ public class VendorListFragment extends Fragment {
 			vendors = db.getAllVendorsAtMarket(chosenMarket.get_ID());
 			Log.v(TAG, "fillData() get vendors at "+chosenMarket.getName());
 		}
+		if (vendors.size() == 0)
+			noVendors.setText("No vendors are at this market yet.");
 		VendorListAdapter vendorAdapter = new VendorListAdapter(getActivity(), vendors);
 		list.setAdapter(vendorAdapter);
 		registerForContextMenu(list);

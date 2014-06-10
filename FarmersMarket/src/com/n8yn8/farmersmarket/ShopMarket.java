@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.n8yn8.farmersmarket.adapter.ItemCheckListAdapter;
@@ -36,12 +37,17 @@ public class ShopMarket extends Activity {
     private List<Item> items;
     ItemCheckListAdapter adapter;
 	Spinner categorySpinner;
+	TextView noItems;
+	TextView marketName;
 	ListView list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shop_market);
+		noItems = (TextView)findViewById(R.id.no_items);
+		marketName = (TextView)findViewById(R.id.market_name);
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
@@ -51,6 +57,10 @@ public class ShopMarket extends Activity {
 		marketId = extras != null ? extras.getLong("market_id")
 				: null;
 		Log.d(TAG, "marketId = "+marketId);
+		
+		String name = extras != null ? extras.getString("market_name")
+				: null;
+		marketName.setText(name);
         
 		categorySpinner = (Spinner) findViewById(R.id.selectCategory);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
@@ -59,6 +69,7 @@ public class ShopMarket extends Activity {
 		categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				Log.i(TAG, "onItemSelected");
 				if(position != 0){
 					String category = parent.getItemAtPosition(position).toString();
 					fillData(category);
@@ -102,14 +113,20 @@ public class ShopMarket extends Activity {
 	}
 	
 	private void fillData(String category){
+		Log.i(TAG, "fillData");
         
 		//For use with InteractiveArrayAdapter
 		items = new ArrayList<Item>();
-		if(category==null)
+		if(category==null){
 			items = db.getItemsAtMarket(marketId);
-		else
+			if (items.size()==0)
+				noItems.setText("No items are at this market.");
+		} else {
 			//TODO
-			items = db.getItemsOf(category, db.KEY_TYPE);
+			items = db.getItemsAtMarketByCategory(marketId, category);
+			if (items.size()==0)
+				noItems.setText("No items are at this market in this category.");
+		}
 		adapter = new ItemCheckListAdapter(this, items);
 		
 		list=(ListView)findViewById(R.id.selectItem);

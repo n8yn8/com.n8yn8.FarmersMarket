@@ -39,6 +39,11 @@
             android:text="Vendor" />
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/no_groceries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ExpandableListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

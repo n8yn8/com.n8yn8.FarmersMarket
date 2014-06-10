@@ -10,6 +10,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
+import com.n8yn8.farmersmarket.EditItem;
 import com.n8yn8.farmersmarket.EditMarket;
+import com.n8yn8.farmersmarket.EditVendor;
+import com.n8yn8.farmersmarket.MarketsMap;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.ShopMarket;
 import com.n8yn8.farmersmarket.adapter.MarketListAdapter;
@@ -55,9 +59,39 @@ public class MarketListFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setHasOptionsMenu(true);
 		db = new DatabaseHelper(this.getActivity());
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.market_list, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+        case R.id.action_settings:
+            return true;
+        case R.id.map_view:
+			intent = new Intent(this.getActivity(), MarketsMap.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+        case R.id.add_item:
+			intent = new Intent(this.getActivity(), EditItem.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+		case R.id.add_vendor:
+			intent = new Intent(this.getActivity(), EditVendor.class);
+			startActivityForResult(intent, ACTIVITY_CREATE);
+			return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
 	
 	private void fillData(){
 		markets = db.getAllMarkets();
@@ -68,15 +102,15 @@ public class MarketListFragment extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				market = (Market) marketsAdapter.getMarket(position);
-				startShopping(market.get_ID());				
+				startShopping((Market) marketsAdapter.getMarket(position));				
 			}
 		});
 	}
 	
-	private void startShopping(long id){
+	private void startShopping(Market market){
 		Intent intent = new Intent(this.getActivity(), ShopMarket.class);
-		intent.putExtra("market_id", id);
+		intent.putExtra("market_id", market.get_ID());
+		intent.putExtra("market_name", market.getName());
 		startActivity(intent);
 	}
 	

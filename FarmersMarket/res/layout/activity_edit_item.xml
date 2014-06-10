@@ -137,7 +137,6 @@
         android:id="@+id/addToGroceries"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onCheckboxClicked"
         android:text="Add to Grocery List" />
 
     <LinearLayout

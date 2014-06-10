@@ -4,13 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <!--
-         <CheckedTextView
-        android:id="@android:id/text1"
-        android:layout_width="match_parent"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:gravity="center_vertical" />
-    -->
     
     <CheckBox
         android:id="@+id/check"
