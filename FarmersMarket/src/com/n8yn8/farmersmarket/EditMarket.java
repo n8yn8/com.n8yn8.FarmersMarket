@@ -34,7 +34,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		db = new DatabaseHelper(this);
     	
 		setContentView(R.layout.activity_edit_market);
@@ -52,13 +52,13 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 		week = new String[] {"Mo ", "Tu ", "We ", "Th ", "Fr ", "Sa ", "Su "};
 		Button confirmButton = (Button) findViewById(R.id.saveNewMarket);
 		Button deleteButton = (Button) findViewById(R.id.deleteMarket);
-		
+
 		if (savedInstanceState == null) {
 			mRowId = null;
 		} else {
 			mRowId = (Long) savedInstanceState.getSerializable(FeedEntry._ID);
 		}
-		
+
 		if (mRowId == null) {
 			Bundle extras = getIntent().getExtras();
 			Boolean newMarket = extras.get("new_market").equals("true");
@@ -70,7 +70,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 				mRowId = extras.getLong(FeedEntry._ID);
 			}
 		}
-		
+
     	populateFields();
     	
     	confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +94,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
 			}
 		});
 	}
-	
+
 	private void populateFields() {
         if (mRowId != null) {
         	Log.v(TAG, "populateFields");
@@ -126,7 +126,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
             Log.d(TAG, daysOpenArray.toString());
         }
     }
-	
+
 	@Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -134,7 +134,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
         saveState();
         outState.putSerializable(FeedEntry._ID, mRowId);
     }
-	
+
 	@Override
     protected void onPause() {
         super.onPause();
@@ -142,13 +142,13 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
         //Log.v(TAG, "onPause");
         //saveState();
     }
-	
+
 	@Override
     protected void onResume() {
         super.onResume();
         populateFields();
     }
-	
+
 	public void showNoticeDialog() {
         // Create an instance of the dialog fragment and show it
         DialogFragment dialog = new NoNameAlertFragment();
@@ -167,7 +167,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
     public void onDialogNegativeClick(DialogFragment dialog) {
     	deleteState();
     }
-	
+
 	private boolean saveState() {
 		Log.i(TAG, "saveState");
 		String name = marketName.getText().toString();
@@ -196,7 +196,7 @@ public class EditMarket extends Activity implements NoNameAlertFragment.NoticeDi
         }
         return (!name.equals(""));
     }
-	
+
 	private void deleteState() {
 		setResult(RESULT_CANCELED);
 		if(mRowId != null){

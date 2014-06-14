@@ -31,14 +31,14 @@ import com.n8yn8.farmersmarket.models.DatabaseHelper;
 import com.n8yn8.farmersmarket.models.Market;
 
 public class MarketListFragment extends Fragment {
-	
+
 	private String TAG = "MarketListFragment";
-	
+
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	private static final int EDIT_ID = Menu.FIRST +2;
 	private static final int ACTIVITY_CREATE=0;
 	private static final int ACTIVITY_EDIT=1;
-	
+
 	private DatabaseHelper db;
 	ListView list;
 	List<Market> markets;
@@ -55,20 +55,20 @@ public class MarketListFragment extends Fragment {
     	fillData();
 		return rootView;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		db = new DatabaseHelper(this.getActivity());
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.market_list, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
-	
+
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
@@ -92,7 +92,7 @@ public class MarketListFragment extends Fragment {
             return super.onOptionsItemSelected(item);
         }
     }
-	
+
 	private void fillData(){
 		markets = db.getAllMarkets();
 		marketsAdapter = new MarketListAdapter(getActivity(), markets);
@@ -106,14 +106,14 @@ public class MarketListFragment extends Fragment {
 			}
 		});
 	}
-	
+
 	private void startShopping(Market market){
 		Intent intent = new Intent(this.getActivity(), ShopMarket.class);
 		intent.putExtra("market_id", market.get_ID());
 		intent.putExtra("market_name", market.getName());
 		startActivity(intent);
 	}
-	
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -139,7 +139,7 @@ public class MarketListFragment extends Fragment {
 		}
 		return super.onContextItemSelected(item);
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);

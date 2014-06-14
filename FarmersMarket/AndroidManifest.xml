@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.n8yn8.farmersmarket"
-    android:versionCode="2"
-    android:versionName="1.1.0" >
+    android:versionCode="3"
+    android:versionName="1.2.0" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -54,6 +54,14 @@
                 android:value="com.n8yn8.farmersmarket.MarketList" />
         </activity>
         <activity
+            android:name="com.n8yn8.farmersmarket.parse.MarketsMap"
+            android:label="@string/title_activity_find_markets"
+            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.n8yn8.farmersmarket.MainActivity" />
+        </activity>
+        <activity
             android:name="com.n8yn8.farmersmarket.Inventory"
             android:label="@string/title_activity_inventory" 
             android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
@@ -63,6 +71,10 @@
         </activity>
         <activity
             android:name="com.n8yn8.farmersmarket.EditMarket"
+            android:label="@string/title_activity_new_market" >
+        </activity>
+        <activity
+            android:name="com.n8yn8.farmersmarket.parse.EditMarket"
             android:label="@string/title_activity_new_market" >
         </activity>
         <activity
@@ -86,7 +98,15 @@
             android:label="@string/title_activity_add_item" >
         </activity>
         <activity
+            android:name="com.n8yn8.farmersmarket.parse.EditItem"
+            android:label="@string/title_activity_add_item" >
+        </activity>
+        <activity
             android:name="com.n8yn8.farmersmarket.EditVendor"
+            android:label="@string/title_activity_edit_vendor" >
+        </activity>
+        <activity
+            android:name="com.n8yn8.farmersmarket.parse.EditVendor"
             android:label="@string/title_activity_edit_vendor" >
         </activity>
         <activity

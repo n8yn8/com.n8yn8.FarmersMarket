@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -20,11 +19,15 @@ import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.adapter.NavDrawerListAdapter;
 import com.n8yn8.farmersmarket.fragments.GroceryListFragment;
-import com.n8yn8.farmersmarket.fragments.ItemListFragment;
-import com.n8yn8.farmersmarket.fragments.MarketListFragment;
-import com.n8yn8.farmersmarket.fragments.VendorListFragment;
 import com.n8yn8.farmersmarket.models.NavDrawerItem;
-import com.testflightapp.lib.TestFlight;
+import com.n8yn8.farmersmarket.parse.Item;
+import com.n8yn8.farmersmarket.parse.ItemListFragment;
+import com.n8yn8.farmersmarket.parse.Market;
+import com.n8yn8.farmersmarket.parse.MarketListFragment;
+import com.n8yn8.farmersmarket.parse.Vendor;
+import com.n8yn8.farmersmarket.parse.VendorListFragment;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class MainActivity extends Activity {
 	
@@ -51,6 +54,12 @@ public class MainActivity extends Activity {
 		//Initialize TestFlight with your app token.
         //TestFlight.takeOff(getApplication(), "17759818-827d-469a-80a5-1db253d778bd");
 		setContentView(R.layout.activity_main);
+		
+		//Switch imports to parse package to use parse.
+		ParseObject.registerSubclass(Market.class);
+		ParseObject.registerSubclass(Vendor.class);
+		ParseObject.registerSubclass(Item.class);
+		Parse.initialize(this, "RNk2C6FdTlpXuNWgCNkF4Hk4Q38XrUpyxCFISFo7", "nRVqyC5iuOLANNWmjwq41VAS1bJf2Hl6IJ4Ad4Sy");
 		
 		mTitle = mDrawerTitle = getTitle();
 		 
@@ -234,19 +243,4 @@ public class MainActivity extends Activity {
             Log.e("MainActivity", "Error in creating fragment");
         }
     }
-	
-	public void viewMarkets(View veiw){
-		Intent intent = new Intent(this, MarketList.class);
-		startActivity(intent);
-	}
-	
-	public void viewGrocery(View view){
-		Intent intent = new Intent(this, GroceryList.class);
-		startActivity(intent);
-	}
-	
-	public void viewInventory(View view){
-		Intent intent = new Intent(this, Inventory.class);
-		startActivity(intent);
-	}
 }

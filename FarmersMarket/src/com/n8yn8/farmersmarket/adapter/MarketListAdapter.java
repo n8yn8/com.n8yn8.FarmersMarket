@@ -15,7 +15,7 @@ import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.models.Market;
 
 public class MarketListAdapter extends BaseAdapter{
-	
+
 	private Activity activity;
     private List<Market> markets;
     private static LayoutInflater inflater=null;
