@@ -22,11 +22,7 @@ public class MarketListAdapter extends ParseQueryAdapter<Market>{
         super(context, new ParseQueryAdapter.QueryFactory<Market>() {
             public ParseQuery<Market> create() {
             	Log.i(TAG, "ParseQuery");
-                // Here we can configure a ParseQuery to display
-                // only top-rated meals.
                 ParseQuery query = new ParseQuery("market");
-                //query.whereContainedIn("rating", Arrays.asList("5", "4"));
-                //query.orderByDescending("rating");
                 return query;
             }
         });
@@ -39,9 +35,7 @@ public class MarketListAdapter extends ParseQueryAdapter<Market>{
         if (v == null) {
             v = View.inflate(getContext(), R.layout.row_markets, null);
         }
-     
-        super.getItemView(market, v, parent);
-     
+        
         /* For adding an image.
         ParseImageView mealImage = (ParseImageView) v.findViewById(R.id.icon);
         ParseFile photoFile = meal.getParseFile("photo");

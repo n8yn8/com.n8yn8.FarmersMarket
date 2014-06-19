@@ -35,8 +35,6 @@ public class VendorListAdapter extends ParseQueryAdapter<Vendor>{
             v = View.inflate(getContext(), android.R.layout.simple_list_item_1, null);
         }
      
-        super.getItemView(vendor, v, parent);
-     
         /* For adding an image.
         ParseImageView mealImage = (ParseImageView) v.findViewById(R.id.icon);
         ParseFile photoFile = meal.getParseFile("photo");

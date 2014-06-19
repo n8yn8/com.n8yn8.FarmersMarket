@@ -40,8 +40,6 @@ private static String TAG = "MarketSpinnerAdapter";
             v = View.inflate(getContext(), android.R.layout.simple_spinner_item, null);
         }
      
-        super.getItemView(market, v, parent);
-     
         /* For adding an image.
         ParseImageView mealImage = (ParseImageView) v.findViewById(R.id.icon);
         ParseFile photoFile = meal.getParseFile("photo");

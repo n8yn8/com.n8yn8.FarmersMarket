@@ -40,8 +40,6 @@ public class ItemListAdapter extends ParseQueryAdapter<Item>{
             v = View.inflate(getContext(), R.layout.row_inventory, null);
         }
      
-        super.getItemView(item, v, parent);
-     
         /* For adding an image.
         ParseImageView mealImage = (ParseImageView) v.findViewById(R.id.icon);
         ParseFile photoFile = meal.getParseFile("photo");

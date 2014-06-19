@@ -48,6 +48,7 @@ public class ItemListFragment extends Fragment {
 	TextView noItems;
 	ListView list;
 	Spinner vendorSpin;
+	ItemListAdapter listAdapter;
 
 	public ItemListFragment(){}
 
@@ -154,7 +155,7 @@ public class ItemListFragment extends Fragment {
 		}
 		*/
 
-		final ItemListAdapter listAdapter = new ItemListAdapter(this.getActivity());
+		listAdapter = new ItemListAdapter(this.getActivity());
 		list.setAdapter(listAdapter);
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -194,8 +195,8 @@ public class ItemListFragment extends Fragment {
 			return true;
 		case EDIT_ID:
 			Intent i = new Intent(this.getActivity(), EditItem.class);
-			//i.putExtra(FeedEntry._ID, items.get((int) info.id).get_ID());
-			Log.v(TAG, "item to edit = "+items.get((int) info.id).getName());
+			i.putExtra("item_id", listAdapter.getItem((int) info.id).getObjectId());
+			i.putExtra("new_item", "false");
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;
 		}
@@ -206,6 +207,7 @@ public class ItemListFragment extends Fragment {
 		public void onClick(View view) {
 			Log.i(TAG, "onClick addItem");
 			Intent intent = new Intent(getActivity(), EditItem.class);
+			intent.putExtra("new_item", "true");
 			startActivityForResult(intent, ACTIVITY_CREATE);
 		}
 	};

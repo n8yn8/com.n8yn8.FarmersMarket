@@ -57,7 +57,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 		newVendor = extras.get("new_vendor").equals("true");
 		Log.v(TAG, "newVendor = "+newVendor);
 		if (!newVendor) {
-			mRowId = extras.getString("market_id");
+			mRowId = extras.getString("vendor_id");
 			ParseQuery<Vendor> query = ParseQuery.getQuery("vendor");
 			query.getInBackground(mRowId, new GetCallback<Vendor>() {
 				public void done(Vendor object, ParseException e) {

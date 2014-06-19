@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -28,6 +27,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.n8yn8.farmersmarket.AlbumStorageDirFactory;
 import com.n8yn8.farmersmarket.BaseAlbumDirFactory;
@@ -35,6 +35,10 @@ import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.FroyoAlbumDirFactory;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 public class EditItem extends Activity implements NoNameAlertFragment.NoticeDialogListener {
 	private static final String TAG = "EditItem";
@@ -42,11 +46,13 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 	EditText itemName;
 	Spinner categorySpinner, vendorSpinner, startSpinner, endSpinner;
-	String name, category, added, price, unit, vendorName, start, end, photo, vendorId;
+	ArrayAdapter<CharSequence> categoryAdapter, monthAdapter;
+	VendorSpinnerAdapter vendorAdapter;
+	String name, category, added, price, unit, vendorName, start, end, photo, vendorId, mRowId;
 	private String mCurrentPhotoPath = "";
 	EditText setPrice, setUnit;
 	CheckBox isAdded;
-	private Long mRowId;
+	Item item;
 
 	//private LruCache<String, Bitmap> mMemoryCache;
 	static int TAKE_PICTURE = 1;
@@ -55,6 +61,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	Bitmap mImageBitmap;
 	public String lastId;  
 	public String picName;
+	Boolean newItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +107,32 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
 		
+		initializeSpinners();
+		
+		Bundle extras = getIntent().getExtras();
+		newItem = extras.get("new_item").equals("true");
+		if (!newItem) {
+			mRowId = extras.getString("item_id");
+			ParseQuery<Item> query = ParseQuery.getQuery("item");
+			query.getInBackground(mRowId, new GetCallback<Item>() {
+				public void done(Item object, ParseException e) {
+					if (e == null) {
+						item = object;
+						populateFields();
+					} else {
+						Toast.makeText(getApplicationContext(), "Items didn't load", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+		}
 
-		mRowId = (savedInstanceState == null) ? null :
+		/*mRowId = (savedInstanceState == null) ? null :
 			(Long) savedInstanceState.getSerializable(FeedEntry._ID);
 		if (mRowId == null) {
 			Bundle extras = getIntent().getExtras();
 			mRowId = extras != null ? extras.getLong(FeedEntry._ID)
 					: null;
-		}
-
-		initializeSpinners();
+		}*/
 
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
@@ -135,7 +158,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 	private void initializeSpinners() {
 		Log.i(TAG, "initializeSpinners");
-		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
+		categoryAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		categorySpinner.setAdapter(categoryAdapter);
 		categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -151,7 +174,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			}
 		});
 
-		final VendorSpinnerAdapter vendorAdapter = new VendorSpinnerAdapter(this);
+		vendorAdapter = new VendorSpinnerAdapter(this);
 		//vendorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		vendorSpinner.setAdapter(vendorAdapter);
 		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -169,7 +192,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			}
 		});
 		
-		ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this, R.array.months_array, android.R.layout.simple_spinner_item);
+		monthAdapter = ArrayAdapter.createFromResource(this, R.array.months_array, android.R.layout.simple_spinner_item);
 		monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		startSpinner.setAdapter(monthAdapter);
 		startSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -197,10 +220,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			}
 		});
-
-		/*
-		if (mRowId != null) {
-			Item item = db.getItem(mRowId);
+	}
+	
+	private void populateFields() {
 			
 			itemName.setText(item.getName());
 			int cPosition = categoryAdapter.getPosition(item.getType());
@@ -208,9 +230,10 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			setPrice.setText(item.getPrice());
 			setUnit.setText(item.getUnit());
-			Vendor thisVendor = db.getVendor(item.getVendorId());
-			int vPosition = vendorAdapter.getPosition(thisVendor);
-			vendorSpinner.setSelection(vPosition);
+			
+			//TODO set vendor spinner
+			//int vPosition = vendorAdapter.getPosition(thisVendor);
+			//vendorSpinner.setSelection(vPosition);
 			
 			int sPosition = monthAdapter.getPosition(item.getSeasonStart());
 			startSpinner.setSelection(sPosition);
@@ -219,17 +242,13 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			endSpinner.setSelection(ePosition);
 
 			if(added!=null)
-				isAdded.setChecked(item.getAdded().equals("yes"));
+				isAdded.setChecked(item.isInGroceries());
 
 			mCurrentPhotoPath = item.getPhoto();
 			if(mCurrentPhotoPath!=null){
 				Log.d(TAG,"on create has photo path " + mCurrentPhotoPath);
 				loadBitmap();
 			}
-			
-			
-			
-		}*/
 	}
 
 	public void newVendor(){
@@ -270,7 +289,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
 		
-		Item item = new Item();
+		if (newItem) {
+			item = new Item();
+		}
 		item.setName(name);
 		item.setType(category);
 		item.setPrice(price);
@@ -281,22 +302,22 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		item.setSeasonEnd(end);
 		item.setInGroceries(isAdded.isChecked());
 		item.setPhoto(mCurrentPhotoPath);
-		item.saveInBackground(/*new SaveCallback() {
+		item.saveInBackground(new SaveCallback() {
 				 
 		        @Override
 		        public void done(ParseException e) {
 		            if (e == null) {
-		                getActivity().setResult(Activity.RESULT_OK);
-		                getActivity().finish();
+		                setResult(Activity.RESULT_OK);
+		                finish();
 		            } else {
 		                Toast.makeText(
-		                        getActivity().getApplicationContext(),
+		                        getApplicationContext(),
 		                        "Error saving: " + e.getMessage(),
 		                        Toast.LENGTH_SHORT).show();
 		            }
 		        }
 		 
-		    }*/);
+		    });
 		return (!name.equals(""));
 	}
 	
