@@ -1,6 +1,7 @@
 package com.n8yn8.farmersmarket.parse;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -169,6 +170,20 @@ public class Item extends ParseObject {
 	 */
 	public void setPhoto(String photo) {
 		put("photo", photo);
+	}
+	
+	/**
+	 * @return the photo
+	 */
+	public ParseFile getPhotoFile() {
+		return getParseFile("photoFile");
+	}
+
+	/**
+	 * @param photo the photo to set
+	 */
+	public void setPhotoFile(ParseFile file) {
+		put("photoFile", file);
 	}
 
 	/**

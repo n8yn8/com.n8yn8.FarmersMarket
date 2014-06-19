@@ -114,10 +114,9 @@ public class ItemListFragment extends Fragment {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 				Log.i(TAG, "vendorSpin onItemSelected");
-				
 					Vendor vendor = spinAdapter.getItem(position);
+					Log.d(TAG, "vendor selected = " + vendor.getName());
 					fillData(vendor);
-				
 			}
 
 			@Override
@@ -163,7 +162,8 @@ public class ItemListFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Log.i(TAG, "listView onItemClick");
 				Intent i = new Intent(getActivity(), EditItem.class);
-				i.putExtra(FeedEntry._ID, listAdapter.getItemId(position));
+				i.putExtra("item_id", listAdapter.getItem(position).getObjectId());
+				i.putExtra("new_item", "false");
 				startActivityForResult(i, ACTIVITY_EDIT);
 			}
 		});
@@ -215,12 +215,14 @@ public class ItemListFragment extends Fragment {
 	public void newItem() {
 		Log.i(TAG, "newItem");
 		Intent i = new Intent(this.getActivity(), EditItem.class);
+		i.putExtra("new_item", "true");
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
 	public void newVendor(){
 		Log.i(TAG, "newVendor");
 		Intent i = new Intent(this.getActivity(), EditVendor.class);
+		i.putExtra("new_vendor", "true");
 		startActivityForResult(i, ACTIVITY_CREATE_VENDOR);
 	}
 

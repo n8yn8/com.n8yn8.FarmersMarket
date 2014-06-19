@@ -22,10 +22,7 @@ public class ItemListAdapter extends ParseQueryAdapter<Item>{
         super(context, new ParseQueryAdapter.QueryFactory<Item>() {
             public ParseQuery<Item> create() {
             	Log.i(TAG, "ParseQuery");
-                // Here we can configure a ParseQuery to display
-                // only top-rated meals.
                 ParseQuery query = new ParseQuery("item");
-                //query.whereContainedIn("rating", Arrays.asList("5", "4"));
                 query.orderByDescending("name");
                 return query;
             }

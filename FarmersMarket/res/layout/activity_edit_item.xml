@@ -22,7 +22,7 @@
             android:layout_marginRight="4dp"
             android:orientation="vertical" >
 
-            <ImageView
+            <com.parse.ParseImageView
                 android:id="@+id/item_imageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

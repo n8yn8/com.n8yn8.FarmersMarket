@@ -1,5 +1,6 @@
 package com.n8yn8.farmersmarket.parse;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,7 +36,10 @@ import com.n8yn8.farmersmarket.FroyoAlbumDirFactory;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseImageView;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -57,7 +60,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	//private LruCache<String, Bitmap> mMemoryCache;
 	static int TAKE_PICTURE = 1;
 	Uri outputFileUri = null;
-	ImageView mImageView;
+	ParseImageView mImageView;
+	Bitmap imageBitmap;
+	ParseFile photoFile;
 	Bitmap mImageBitmap;
 	public String lastId;  
 	public String picName;
@@ -98,7 +103,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	        }
 	    };*/
 
-		mImageView = (ImageView) findViewById(R.id.item_imageView);
+		mImageView = (ParseImageView) findViewById(R.id.item_imageView);
 		mImageView.setImageResource(R.drawable.ic_item_holder);
 		mImageBitmap = null;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
@@ -139,8 +144,8 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			public void onClick(View view) {
 				Log.d(TAG, "itemName on Save button = "+itemName.getText().toString());
 				if(saveState()) {
-					setResult(RESULT_OK);
-					finish();
+					setResult(Activity.RESULT_OK);
+	                finish();
 				} else {
 					showNoticeDialog();
 				}
@@ -243,12 +248,28 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			if(added!=null)
 				isAdded.setChecked(item.isInGroceries());
+			
+			photoFile = item.getParseFile("photoFile");
+			if (photoFile != null) {
+				mImageView.setParseFile(photoFile);
+				mImageView.loadInBackground(new GetDataCallback () {
 
-			mCurrentPhotoPath = item.getPhoto();
+					@Override
+					public void done(byte[] data, ParseException e) {
+						if (e != null) {
+							Toast.makeText(getApplicationContext(), "Error loading image", Toast.LENGTH_SHORT).show();
+						}
+						
+					}
+					
+				});
+			}
+
+			/*mCurrentPhotoPath = item.getPhoto();
 			if(mCurrentPhotoPath!=null){
 				Log.d(TAG,"on create has photo path " + mCurrentPhotoPath);
 				loadBitmap();
-			}
+			}*/
 	}
 
 	public void newVendor(){
@@ -260,7 +281,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.i(TAG, "onSaveInstanceState");
-		saveState();
+		//saveState();
 		outState.putSerializable(FeedEntry._ID, mRowId);
 	}
 
@@ -302,13 +323,34 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		item.setSeasonEnd(end);
 		item.setInGroceries(isAdded.isChecked());
 		item.setPhoto(mCurrentPhotoPath);
+		
+		if(imageBitmap != null) {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+	        byte[] scaledData = bos.toByteArray();
+	        photoFile = new ParseFile("meal_photo.jpg", scaledData);
+			photoFile.saveInBackground(new SaveCallback() {
+
+				public void done(ParseException e) {
+					if (e != null) {
+						Toast.makeText(getApplicationContext(),
+								"Error saving: " + e.getMessage(),
+								Toast.LENGTH_LONG).show();
+					} else {
+						Toast.makeText(getApplicationContext(),
+								"file saved",
+								Toast.LENGTH_LONG).show();
+					}
+				}
+			});
+			item.setPhotoFile(photoFile);
+		}
 		item.saveInBackground(new SaveCallback() {
 				 
 		        @Override
 		        public void done(ParseException e) {
 		            if (e == null) {
-		                setResult(Activity.RESULT_OK);
-		                finish();
+		                
 		            } else {
 		                Toast.makeText(
 		                        getApplicationContext(),
@@ -351,7 +393,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        Log.d(TAG, "Positive button pressed");
+        Log.i(TAG, "Positive button pressed");
     }
 
     @Override
@@ -367,7 +409,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			f = setUpPhotoFile();
 			mCurrentPhotoPath = f.getAbsolutePath();
 			Log.d("takePic", "Absolute path created at "+mCurrentPhotoPath);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			//intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 		} catch (IOException e) {
 			e.printStackTrace();
 			f = null;
@@ -384,6 +426,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	}
 
 	private File setUpPhotoFile() throws IOException {
+		Log.i(TAG, "setUpPhotoFile");
 		File f = createImageFile();
 		mCurrentPhotoPath = f.getAbsolutePath();
 
@@ -391,6 +434,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	}
 
 	private File createImageFile() throws IOException {
+		Log.i(TAG, "createImageFile");
 		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "IMG_" + timeStamp + "_";
@@ -400,6 +444,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	}
 
 	private File getAlbumDir() {
+		Log.i(TAG, "getAlbumDir");
 		File storageDir = null;
 
 		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
@@ -424,6 +469,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 	/* Photo album for this application */
 	private String getAlbumName() {
+		Log.i(TAG, "getAlbumName");
 		return getString(R.string.album_name);
 	}
 
@@ -432,10 +478,14 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		Log.i(TAG, "onActivityResult");
 		if (requestCode == TAKE_PICTURE && resultCode==RESULT_OK){
-			if (mCurrentPhotoPath != null) {
+			Bundle extras = data.getExtras();
+	        imageBitmap = (Bitmap) extras.get("data");
+	        mImageView.setImageBitmap(imageBitmap);
+	        
+			/*if (mCurrentPhotoPath != null) {
 				saveBitmap();
 				mCurrentPhotoPath = null;
-			}
+			}*/
 		}
 	}
 	
@@ -449,7 +499,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 }*/
 	
 private void saveBitmap() {
-		
+		Log.i(TAG, "saveBitmap");
 
 		/* There isn't enough memory to open up more than a couple camera photos */
 		/* So pre-scale the target bitmap into which the file is decoded */
@@ -497,6 +547,7 @@ private void saveBitmap() {
 	}
 
 	public void loadBitmap(){
+		Log.i(TAG, "loadBitmap");
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
 		mImageView.setImageBitmap(bitmap);
 	}

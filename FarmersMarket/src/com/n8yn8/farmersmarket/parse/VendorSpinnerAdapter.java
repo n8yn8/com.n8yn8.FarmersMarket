@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.parse.ParseQueryAdapter.OnQueryLoadListener;
 
 public class VendorSpinnerAdapter extends ParseQueryAdapter<Vendor>{
 
@@ -21,16 +22,13 @@ public class VendorSpinnerAdapter extends ParseQueryAdapter<Vendor>{
         super(context, new ParseQueryAdapter.QueryFactory<Vendor>() {
             public ParseQuery<Vendor> create() {
             	Log.i(TAG, "ParseQuery");
-                // Here we can configure a ParseQuery to display
-                // only top-rated meals.
                 ParseQuery query = new ParseQuery("vendor");
-                //query.whereContainedIn("rating", Arrays.asList("5", "4"));
                 query.orderByDescending("name");
                 return query;
             }
         });
     }
-	
+
 	@Override
     public View getItemView(Vendor vendor, View v, ViewGroup parent) {
     	Log.i(TAG, "getItemView");
