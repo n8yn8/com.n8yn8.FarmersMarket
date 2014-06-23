@@ -13,11 +13,12 @@ public class VendorListAdapter extends ParseQueryAdapter<Vendor>{
 	
 	private static String TAG = "MarketListAdapter";
     
-    public VendorListAdapter(Context context) {
+    public VendorListAdapter(Context context, final Market market) {
         super(context, new ParseQueryAdapter.QueryFactory<Vendor>() {
             public ParseQuery<Vendor> create() {
             	Log.i(TAG, "ParseQuery");
                 ParseQuery query = new ParseQuery("vendor");
+                query.whereEqualTo("vendor_at_market", market);
                 query.orderByDescending("name");
                 return query;
             }

@@ -49,6 +49,7 @@ public class VendorListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.i(TAG, "onCreateView");
 		View rootView = inflater.inflate(R.layout.activity_vendor_list, container, false);
 		marketSpin=(Spinner)rootView.findViewById(R.id.market_spinner);
 		Button newVendor = (Button) rootView.findViewById(R.id.new_vendor);
@@ -61,6 +62,7 @@ public class VendorListFragment extends Fragment {
 	
 	private OnClickListener addVendor = new OnClickListener() {
 		public void onClick(View view) {
+			Log.i(TAG, "addVendor OnClickListener");
 			Intent intent = new Intent(getActivity(), EditVendor.class);
 			intent.putExtra("new_vendor", "true");
 			startActivityForResult(intent, ACTIVITY_CREATE_VENDOR);
@@ -69,18 +71,21 @@ public class VendorListFragment extends Fragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		Log.i(TAG, "onCreateOptionsMenu");
 		inflater.inflate(R.menu.add_bar, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
+		Log.i(TAG, "onOptionsItemSelected");
         Intent intent;
         // Handle action bar actions click
         switch (item.getItemId()) {
@@ -105,6 +110,7 @@ public class VendorListFragment extends Fragment {
     }
 
 	private void loadMarkets () {
+		Log.i(TAG, "loadMarkets");
 		final MarketSpinnerAdapter spinAdapter = new MarketSpinnerAdapter(this.getActivity());
 		//spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		marketSpin.setAdapter(spinAdapter);
@@ -123,8 +129,9 @@ public class VendorListFragment extends Fragment {
 	}
 	
 	private void fillData() {
+		Log.i(TAG, "fillData");
 		
-		vendorAdapter = new VendorListAdapter(getActivity());
+		vendorAdapter = new VendorListAdapter(getActivity(), chosenMarket);
 		/*
 		if (chosenMarket == null){
 			vendors = db.getAllVendors();
@@ -146,6 +153,7 @@ public class VendorListFragment extends Fragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
+		Log.i(TAG, "onCreateContextMenu");
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, DELETE_ID, 0, "Delete Vendor");
 		menu.add(0, EDIT_ID, 0, "Edit Vendor");
@@ -153,6 +161,7 @@ public class VendorListFragment extends Fragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		Log.i(TAG, "onContextItemSelected");
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		switch(item.getItemId()) {
 		case DELETE_ID:
@@ -171,6 +180,7 @@ public class VendorListFragment extends Fragment {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		Log.i(TAG, "onActivityResult");
 		super.onActivityResult(requestCode, resultCode, intent);
 		fillData();
 	}

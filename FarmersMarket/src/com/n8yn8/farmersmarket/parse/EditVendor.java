@@ -42,6 +42,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_vendor);
 
@@ -70,6 +71,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 				}
 			});
 		}
+		getMarkets();
 
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
@@ -103,19 +105,19 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 					// There was an error
 				} else {
 					Log.d(TAG, checkedMarkets.toString());
-					getMarkets(checkedMarkets);
 				}
 			}
 		});
 	}
 
-	private void getMarkets(final List<Market> checkedMarkets){
+	private void getMarkets(){
+		Log.i(TAG, "getMarkets");
 		ParseQuery<Market> query = ParseQuery.getQuery("market");
 		query.findInBackground(new FindCallback<Market>() {
 			public void done(List<Market> markets, ParseException e) {
 				if (e == null) {
 					//TODO compare 
-					for (int i = 0; i < markets.size(); i++) {
+					/*for (int i = 0; i < markets.size(); i++) {
 						for (int j = 0; j < checkedMarkets.size(); j++)
 						if (markets.get(i).getObjectId() == checkedMarkets.get(j).getObjectId()) {
 							markets.get(i).setSelected(true);
@@ -123,7 +125,8 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 						} else {
 							Log.d(TAG, "Markets not in relation " + markets.get(i).getObjectId() + " " + checkedMarkets.get(j).getObjectId());
 						}
-					}
+					}*/
+					Log.d(TAG, "getMarkets retreived "+markets.toString());
 					populateMarkets(markets);
 				} else {
 					Log.d(TAG, "Error: " + e.getMessage());
@@ -133,30 +136,35 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 	}
 
 	public void populateMarkets(List<Market> markets) {
+		Log.i(TAG, "populateMarkets");
 		marketAdapter = new MarketCheckListAdapter(this, markets);
 		marketName.setAdapter(marketAdapter);
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
+		Log.i(TAG, "onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 		//saveState();
-		outState.putSerializable(FeedEntry._ID, mRowId);
+		//outState.putSerializable(FeedEntry._ID, mRowId);
 	}
 
 	@Override
 	protected void onPause() {
+		Log.i(TAG, "onPause");
 		super.onPause();
 		//saveState();
 	}
 
 	@Override
 	protected void onResume() {
+		Log.i(TAG, "onResume");
 		super.onResume();
 		//getMarkets();
 	}
 
 	private boolean saveState() {
+		Log.i(TAG, "saveState");
 		String vendorName = vendorNameField.getText().toString();
 
 		List<Market> markets = marketAdapter.markets;
@@ -198,6 +206,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 	}
 
 	private void deleteState() {
+		Log.i(TAG, "deleteState");
 		setResult(RESULT_CANCELED);
 		if(mRowId != null){
 			Log.d(TAG, "mRowId to delete = "+mRowId);
@@ -206,6 +215,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 	}
 
 	public void onCheckboxClicked(View view) {
+		Log.i(TAG, "onCheckboxClicked");
 		// Is the view now checked?
 		boolean checked = isOrganic.isChecked();
 
@@ -222,12 +232,14 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		Log.i(TAG, "onCreateOptionsMenu");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_vendor, menu);
 		return true;
 	}
 
 	public void showNoticeDialog() {
+		Log.i(TAG, "showNoticeDialog");
 		// Create an instance of the dialog fragment and show it
 		DialogFragment dialog = new NoNameAlertFragment();
 		dialog.show(getFragmentManager(), "NoticeDialogFragment");
