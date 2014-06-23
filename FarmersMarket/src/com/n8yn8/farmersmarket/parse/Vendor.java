@@ -11,7 +11,7 @@ public class Vendor extends ParseObject{
 	public Vendor() {
 		super();
 	}
-	
+
 	public long getId() {
 		return _ID;
 	}

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -35,6 +36,7 @@ import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.FroyoAlbumDirFactory;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -50,12 +52,14 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	EditText itemName;
 	Spinner categorySpinner, vendorSpinner, startSpinner, endSpinner;
 	ArrayAdapter<CharSequence> categoryAdapter, monthAdapter;
-	VendorSpinnerAdapter vendorAdapter;
+	ArrayAdapter<Vendor> vendorAdapter;
 	String name, category, added, price, unit, vendorName, start, end, photo, vendorId, mRowId;
 	private String mCurrentPhotoPath = "";
 	EditText setPrice, setUnit;
 	CheckBox isAdded;
 	Item item;
+	Vendor thisVendor;
+	boolean itemLoaded, vendorsLoaded;
 
 	//private LruCache<String, Bitmap> mMemoryCache;
 	static int TAKE_PICTURE = 1;
@@ -73,6 +77,8 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
 
+		itemLoaded = false;
+		vendorsLoaded = false;
 		setContentView(R.layout.activity_edit_item);
 		itemName = (EditText) findViewById(R.id.itemName);
 		categorySpinner = (Spinner) findViewById(R.id.category);
@@ -119,10 +125,13 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		if (!newItem) {
 			mRowId = extras.getString("item_id");
 			ParseQuery<Item> query = ParseQuery.getQuery("item");
+			query.include("vendor");
 			query.getInBackground(mRowId, new GetCallback<Item>() {
 				public void done(Item object, ParseException e) {
 					if (e == null) {
+						Log.i(TAG, "Item query finished successfully");
 						item = object;
+						itemLoaded = true;
 						populateFields();
 					} else {
 						Toast.makeText(getApplicationContext(), "Items didn't load", Toast.LENGTH_SHORT).show();
@@ -130,14 +139,10 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 				}
 			});
 		}
-
-		/*mRowId = (savedInstanceState == null) ? null :
-			(Long) savedInstanceState.getSerializable(FeedEntry._ID);
-		if (mRowId == null) {
-			Bundle extras = getIntent().getExtras();
-			mRowId = extras != null ? extras.getLong(FeedEntry._ID)
-					: null;
-		}*/
+		
+		if (!newItem){
+			
+		}
 
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
@@ -174,28 +179,29 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
-
-		vendorAdapter = new VendorSpinnerAdapter(this);
-		//vendorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		vendorSpinner.setAdapter(vendorAdapter);
-		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-				Vendor thisVendor = vendorAdapter.getItem(position);
-				vendorId = thisVendor.getObjectId();
-				vendorName = thisVendor.getName();
-			}
+		
+		ParseQuery<Vendor> query = ParseQuery.getQuery("vendor");
+		query.findInBackground(new FindCallback<Vendor>() {
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
+			public void done(List<Vendor> vendors, ParseException e) {
+				if (e == null) {
+					Log.i(TAG, "Vendor list query finished successfully");
+					loadVendorSpinner(vendors);
+					
+				} else {
+					Log.e(TAG, "Error loading Vendor list" + e.getMessage());
+				}
+				
 			}
+			
 		});
+
+		
 		
 		monthAdapter = ArrayAdapter.createFromResource(this, R.array.months_array, android.R.layout.simple_spinner_item);
 		monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -208,7 +214,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
@@ -221,13 +227,36 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 		});
 	}
 	
+	private void loadVendorSpinner (List<Vendor> vendors) {
+		Log.i(TAG, "loadVendorSpinner");
+		vendorAdapter = new VendorSpinnerAdapter(this, android.R.id.text1, vendors);
+		vendorSpinner.setAdapter(vendorAdapter);
+		vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				Log.i(TAG, "vendor spinner onItemSelected");
+				thisVendor = vendorAdapter.getItem(position);
+				Log.d(TAG, "selected Vendor = " + thisVendor.getName());
+				vendorId = thisVendor.getObjectId();
+				vendorName = thisVendor.getName();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				Log.i(TAG, "vendorSpinner nothingSelected");
+			}
+		});
+		vendorsLoaded = true;
+	}
+	
 	private void populateFields() {
+		Log.i(TAG, "populateFields");
 			
 			itemName.setText(item.getName());
 			int cPosition = categoryAdapter.getPosition(item.getType());
@@ -237,6 +266,15 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			setUnit.setText(item.getUnit());
 			
 			//TODO set vendor spinner
+			thisVendor = (Vendor) item.get("vendor");
+			try {
+				thisVendor.fetchIfNeeded();
+			} catch (ParseException e1) {
+				Log.e(TAG, "Error fetching vendor");
+				e1.printStackTrace();
+			}
+			Log.d(TAG, "thisVendor = " + thisVendor.getName());
+			
 			//int vPosition = vendorAdapter.getPosition(thisVendor);
 			//vendorSpinner.setSelection(vPosition);
 			
@@ -264,12 +302,6 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 					
 				});
 			}
-
-			/*mCurrentPhotoPath = item.getPhoto();
-			if(mCurrentPhotoPath!=null){
-				Log.d(TAG,"on create has photo path " + mCurrentPhotoPath);
-				loadBitmap();
-			}*/
 	}
 
 	public void newVendor(){
@@ -301,7 +333,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	protected void onResume() {
 		super.onResume();
 		Log.i(TAG, "onResume");
-		initializeSpinners();
+		//initializeSpinners();
 	}
 
 	private boolean saveState() {
@@ -319,6 +351,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		item.setUnit(unit);
 		item.setVendorId(vendorId);
 		item.setVendorName(vendorName);
+		item.put("vendor", thisVendor);
 		item.setSeasonStart(start);
 		item.setSeasonEnd(end);
 		item.setInGroceries(isAdded.isChecked());
@@ -334,11 +367,12 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 				public void done(ParseException e) {
 					if (e != null) {
 						Toast.makeText(getApplicationContext(),
-								"Error saving: " + e.getMessage(),
+								"Error saving photoFile: " + e.getMessage(),
 								Toast.LENGTH_LONG).show();
+						Log.e(TAG, "Error saving: " + e.getMessage());
 					} else {
 						Toast.makeText(getApplicationContext(),
-								"file saved",
+								"Photo Saved",
 								Toast.LENGTH_LONG).show();
 					}
 				}
@@ -350,12 +384,17 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		        @Override
 		        public void done(ParseException e) {
 		            if (e == null) {
-		                
+		            	Toast.makeText(
+		                        getApplicationContext(),
+		                        "Item saved successfully",
+		                        Toast.LENGTH_SHORT).show();
+		            	
 		            } else {
 		                Toast.makeText(
 		                        getApplicationContext(),
-		                        "Error saving: " + e.getMessage(),
+		                        "Error saving Item: " + e.getMessage(),
 		                        Toast.LENGTH_SHORT).show();
+		                Log.e(TAG, "Error saving: " + e.getMessage());
 		            }
 		        }
 		 

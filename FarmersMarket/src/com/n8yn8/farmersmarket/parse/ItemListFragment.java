@@ -25,9 +25,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.MarketsMap;
 import com.n8yn8.farmersmarket.R;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 
 
@@ -48,6 +51,7 @@ public class ItemListFragment extends Fragment {
 	TextView noItems;
 	ListView list;
 	Spinner vendorSpin;
+	VendorSpinnerAdapter vendorAdapter;
 	ItemListAdapter listAdapter;
 
 	public ItemListFragment(){}
@@ -107,14 +111,27 @@ public class ItemListFragment extends Fragment {
 		Log.i(TAG, "loadVendors");
 
 		//TODO "add vendor first" when no vendors.
-		final VendorSpinnerAdapter spinAdapter = new VendorSpinnerAdapter(this.getActivity());
-		//spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		vendorSpin.setAdapter(spinAdapter);
+		ParseQuery<Vendor> query = ParseQuery.getQuery("vendor");
+		query.findInBackground(new FindCallback<Vendor>() {
+
+			@Override
+			public void done(List<Vendor> vendors, ParseException e) {
+				loadVendorSpinner(vendors);
+				
+			}
+			
+		});
+		
+	}
+
+	private void loadVendorSpinner(List<Vendor> vendors) {
+		vendorAdapter = new VendorSpinnerAdapter(getActivity().getApplicationContext(), android.R.id.text1, vendors);
+		vendorSpin.setAdapter(vendorAdapter);
 		vendorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 				Log.i(TAG, "vendorSpin onItemSelected");
-					Vendor vendor = spinAdapter.getItem(position);
+					Vendor vendor = vendorAdapter.getVendor(position);
 					Log.d(TAG, "vendor selected = " + vendor.getName());
 					fillData(vendor);
 			}
@@ -124,8 +141,6 @@ public class ItemListFragment extends Fragment {
 			}
 		});
 	}
-
-
 
 	private void fillData(Vendor vendor) {
 

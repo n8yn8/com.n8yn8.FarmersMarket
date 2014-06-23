@@ -4,57 +4,68 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
-import com.parse.ParseQueryAdapter.OnQueryLoadListener;
+public class VendorSpinnerAdapter extends ArrayAdapter<Vendor>{
 
-public class VendorSpinnerAdapter extends ParseQueryAdapter<Vendor>{
+    // Your sent context
+    private Context context;
+    // Your custom values for the spinner (User)
+    private List<Vendor> values;
+    private int textViewResourceId;
 
-	private static String TAG = "VendorSpinnerAdapter";
-
-	public VendorSpinnerAdapter(Context context) {
-        super(context, new ParseQueryAdapter.QueryFactory<Vendor>() {
-            public ParseQuery<Vendor> create() {
-            	Log.i(TAG, "ParseQuery");
-                ParseQuery query = new ParseQuery("vendor");
-                query.orderByDescending("name");
-                return query;
-            }
-        });
+    public VendorSpinnerAdapter(Context context, int textViewResourceId,
+    		List<Vendor> values) {
+        super(context, textViewResourceId, values);
+        this.context = context;
+        this.textViewResourceId = textViewResourceId;
+        this.values = values;
     }
 
-	@Override
-    public View getItemView(Vendor vendor, View v, ViewGroup parent) {
-    	Log.i(TAG, "getItemView");
-     
-        if (v == null) {
-            v = View.inflate(getContext(), android.R.layout.simple_spinner_item, null);
-        }
-     
-        /* For adding an image.
-        ParseImageView mealImage = (ParseImageView) v.findViewById(R.id.icon);
-        ParseFile photoFile = meal.getParseFile("photo");
-        if (photoFile != null) {
-            mealImage.setParseFile(photoFile);
-            mealImage.loadInBackground(new GetDataCallback() {
-                @Override
-                public void done(byte[] data, ParseException e) {
-                    // nothing to do
-                }
-            });
-        }*/
-     
-        TextView name = (TextView)v.findViewById(android.R.id.text1);
-        
-        name.setText(vendor.getName());
-
-        return v;
+    public int getCount(){
+       return values.size();
     }
 
+    public Vendor getVendor(int position){
+       return values.get(position);
+    }
+
+    public long getVendorId(int position){
+       return values.get(position).getId();
+    }
+
+
+    // And the "magic" goes here
+    // This is for the "passive" state of the spinner
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
+        TextView label = new TextView(context);
+        label.setTextColor(Color.BLACK);
+        // Then you can get the current item using the values array (Users array) and the current position
+        // You can NOW reference each method you has created in your bean object (User class)
+        label.setText(values.get(position).getName());
+
+        // And finally return your dynamic (or custom) view for each spinner item
+        return label;
+    }
+
+    // And here is when the "chooser" is popped up
+    // Normally is the same view, but you can customize it if you want
+    @Override
+    public View getDropDownView(int position, View convertView,
+            ViewGroup parent) {
+        TextView label = new TextView(context);
+        label.setTextColor(Color.BLACK);
+        label.setText(values.get(position).getName());
+
+        return label;
+    }
+
+	public int getPosition(Vendor vendor) {
+		return values.indexOf(vendor);
+	}
 }
