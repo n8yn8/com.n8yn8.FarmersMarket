@@ -47,7 +47,6 @@ public class ItemListFragment extends Fragment {
 
 	boolean seasonalOnly;
 
-	List<Item> items;
 	TextView noItems;
 	ListView list;
 	Spinner vendorSpin;
@@ -169,8 +168,12 @@ public class ItemListFragment extends Fragment {
 		}
 		*/
 
-		listAdapter = new ItemListAdapter(this.getActivity());
+		listAdapter = new ItemListAdapter(this.getActivity(), vendor);
 		list.setAdapter(listAdapter);
+		if (list.getCount() == 0) {
+			noItems.setText("There are no items added yet at this vendor.");
+			Log.d(TAG, "no items yet at this vendor");
+		}
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
 			@Override

@@ -24,4 +24,14 @@ public class Vendor extends ParseObject{
 	public void setName(String name) {
 		put("name", name);
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return this.getObjectId().equals(((Vendor) o).getObjectId());
+	}
+	
+	
 }

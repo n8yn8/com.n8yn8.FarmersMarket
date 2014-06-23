@@ -18,11 +18,12 @@ public class ItemListAdapter extends ParseQueryAdapter<Item>{
 	
 	private static String TAG = "ItemsListAdapter";
     
-    public ItemListAdapter(Context context) {
+    public ItemListAdapter(Context context, final Vendor vendor) {
         super(context, new ParseQueryAdapter.QueryFactory<Item>() {
             public ParseQuery<Item> create() {
             	Log.i(TAG, "ParseQuery");
                 ParseQuery query = new ParseQuery("item");
+                query.whereEqualTo("vendor", vendor);
                 query.orderByDescending("name");
                 return query;
             }

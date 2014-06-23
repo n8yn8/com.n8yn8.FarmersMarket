@@ -275,8 +275,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			}
 			Log.d(TAG, "thisVendor = " + thisVendor.getName());
 			
-			//int vPosition = vendorAdapter.getPosition(thisVendor);
-			//vendorSpinner.setSelection(vPosition);
+			int vPosition = vendorAdapter.getPosition(thisVendor);
+			Log.d(TAG, "position of vendor = " + vPosition);
+			vendorSpinner.setSelection(vPosition);
 			
 			int sPosition = monthAdapter.getPosition(item.getSeasonStart());
 			startSpinner.setSelection(sPosition);

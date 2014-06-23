@@ -17,10 +17,7 @@ public class VendorListAdapter extends ParseQueryAdapter<Vendor>{
         super(context, new ParseQueryAdapter.QueryFactory<Vendor>() {
             public ParseQuery<Vendor> create() {
             	Log.i(TAG, "ParseQuery");
-                // Here we can configure a ParseQuery to display
-                // only top-rated meals.
                 ParseQuery query = new ParseQuery("vendor");
-                //query.whereContainedIn("rating", Arrays.asList("5", "4"));
                 query.orderByDescending("name");
                 return query;
             }
