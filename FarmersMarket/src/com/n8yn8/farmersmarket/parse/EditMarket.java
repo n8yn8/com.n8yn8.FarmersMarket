@@ -20,7 +20,6 @@ import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 

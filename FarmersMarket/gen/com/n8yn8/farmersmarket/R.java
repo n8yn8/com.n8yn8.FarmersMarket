@@ -339,47 +339,47 @@ containing a value of this type.
         public static final int zOrderOnTop=0x7f010010;
     }
     public static final class color {
-        public static final int common_action_bar_splitter=0x7f050009;
+        public static final int common_action_bar_splitter=0x7f060009;
         /**  Sign-in Button Colors 
          */
-        public static final int common_signin_btn_dark_text_default=0x7f050000;
-        public static final int common_signin_btn_dark_text_disabled=0x7f050002;
-        public static final int common_signin_btn_dark_text_focused=0x7f050003;
-        public static final int common_signin_btn_dark_text_pressed=0x7f050001;
-        public static final int common_signin_btn_default_background=0x7f050008;
-        public static final int common_signin_btn_light_text_default=0x7f050004;
-        public static final int common_signin_btn_light_text_disabled=0x7f050006;
-        public static final int common_signin_btn_light_text_focused=0x7f050007;
-        public static final int common_signin_btn_light_text_pressed=0x7f050005;
-        public static final int common_signin_btn_text_dark=0x7f05001e;
-        public static final int common_signin_btn_text_light=0x7f05001f;
-        public static final int counter_text_bg=0x7f05001b;
-        public static final int counter_text_color=0x7f05001c;
-        public static final int list_background=0x7f050018;
-        public static final int list_background_pressed=0x7f050019;
-        public static final int list_divider=0x7f05001a;
-        public static final int list_item_title=0x7f050017;
-        public static final int pressed_emerald=0x7f05001d;
-        public static final int wallet_bright_foreground_disabled_holo_light=0x7f05000f;
+        public static final int common_signin_btn_dark_text_default=0x7f060000;
+        public static final int common_signin_btn_dark_text_disabled=0x7f060002;
+        public static final int common_signin_btn_dark_text_focused=0x7f060003;
+        public static final int common_signin_btn_dark_text_pressed=0x7f060001;
+        public static final int common_signin_btn_default_background=0x7f060008;
+        public static final int common_signin_btn_light_text_default=0x7f060004;
+        public static final int common_signin_btn_light_text_disabled=0x7f060006;
+        public static final int common_signin_btn_light_text_focused=0x7f060007;
+        public static final int common_signin_btn_light_text_pressed=0x7f060005;
+        public static final int common_signin_btn_text_dark=0x7f06001e;
+        public static final int common_signin_btn_text_light=0x7f06001f;
+        public static final int counter_text_bg=0x7f06001b;
+        public static final int counter_text_color=0x7f06001c;
+        public static final int list_background=0x7f060018;
+        public static final int list_background_pressed=0x7f060019;
+        public static final int list_divider=0x7f06001a;
+        public static final int list_item_title=0x7f060017;
+        public static final int pressed_emerald=0x7f06001d;
+        public static final int wallet_bright_foreground_disabled_holo_light=0x7f06000f;
         /** 
          Wallet colors to support consistent Wallet fragment holo dark UI in client application
          regardless of the theme and device type
     
          */
-        public static final int wallet_bright_foreground_holo_dark=0x7f05000a;
-        public static final int wallet_bright_foreground_holo_light=0x7f050010;
-        public static final int wallet_dim_foreground_disabled_holo_dark=0x7f05000c;
-        public static final int wallet_dim_foreground_holo_dark=0x7f05000b;
-        public static final int wallet_dim_foreground_inverse_disabled_holo_dark=0x7f05000e;
-        public static final int wallet_dim_foreground_inverse_holo_dark=0x7f05000d;
-        public static final int wallet_highlighted_text_holo_dark=0x7f050014;
-        public static final int wallet_highlighted_text_holo_light=0x7f050013;
-        public static final int wallet_hint_foreground_holo_dark=0x7f050012;
-        public static final int wallet_hint_foreground_holo_light=0x7f050011;
-        public static final int wallet_holo_blue_light=0x7f050015;
-        public static final int wallet_link_text_light=0x7f050016;
-        public static final int wallet_primary_text_holo_light=0x7f050020;
-        public static final int wallet_secondary_text_holo_dark=0x7f050021;
+        public static final int wallet_bright_foreground_holo_dark=0x7f06000a;
+        public static final int wallet_bright_foreground_holo_light=0x7f060010;
+        public static final int wallet_dim_foreground_disabled_holo_dark=0x7f06000c;
+        public static final int wallet_dim_foreground_holo_dark=0x7f06000b;
+        public static final int wallet_dim_foreground_inverse_disabled_holo_dark=0x7f06000e;
+        public static final int wallet_dim_foreground_inverse_holo_dark=0x7f06000d;
+        public static final int wallet_highlighted_text_holo_dark=0x7f060014;
+        public static final int wallet_highlighted_text_holo_light=0x7f060013;
+        public static final int wallet_hint_foreground_holo_dark=0x7f060012;
+        public static final int wallet_hint_foreground_holo_light=0x7f060011;
+        public static final int wallet_holo_blue_light=0x7f060015;
+        public static final int wallet_link_text_light=0x7f060016;
+        public static final int wallet_primary_text_holo_light=0x7f060020;
+        public static final int wallet_secondary_text_holo_dark=0x7f060021;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -438,132 +438,132 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f02002b;
     }
     public static final class id {
-        public static final int Buttons=0x7f060027;
-        public static final int Details=0x7f060018;
-        public static final int Farm=0x7f060073;
-        public static final int LinearLayout1=0x7f060014;
-        public static final int MainInfo=0x7f060015;
-        public static final int Seasons=0x7f060022;
-        public static final int Sorting=0x7f06004c;
-        public static final int Time=0x7f060041;
-        public static final int action_settings=0x7f060076;
-        public static final int addToGroceries=0x7f060026;
-        public static final int add_item=0x7f060077;
-        public static final int add_vendor=0x7f060078;
-        public static final int at=0x7f060074;
-        public static final int book_now=0x7f060010;
-        public static final int buyButton=0x7f06000a;
-        public static final int buy_now=0x7f06000f;
-        public static final int buy_with_google=0x7f06000e;
-        public static final int byType=0x7f06004d;
-        public static final int byVendor=0x7f06004e;
-        public static final int category=0x7f06001a;
-        public static final int check=0x7f060070;
-        public static final int checkBox1=0x7f060066;
-        public static final int checkFri=0x7f06003a;
-        public static final int checkMon=0x7f06002e;
-        public static final int checkSat=0x7f06003d;
-        public static final int checkSun=0x7f060040;
-        public static final int checkThu=0x7f060037;
-        public static final int checkTue=0x7f060031;
-        public static final int checkWed=0x7f060034;
-        public static final int check_organic=0x7f060047;
-        public static final int classic=0x7f060011;
-        public static final int close=0x7f06006f;
-        public static final int closeTime=0x7f060043;
-        public static final int counter=0x7f060064;
-        public static final int currency=0x7f060068;
-        public static final int dash=0x7f06006e;
-        public static final int dates=0x7f06002b;
-        public static final int days=0x7f06006c;
-        public static final int deleteItem=0x7f060029;
-        public static final int deleteMarket=0x7f060045;
-        public static final int deleteVendor=0x7f06004a;
-        public static final int details=0x7f060072;
-        public static final int drawer_layout=0x7f060056;
-        public static final int frame_container=0x7f060057;
-        public static final int fri=0x7f060038;
-        public static final int grayscale=0x7f060012;
-        public static final int holo_dark=0x7f060005;
-        public static final int holo_light=0x7f060006;
-        public static final int hybrid=0x7f060004;
-        public static final int icon=0x7f060062;
-        public static final int itemName=0x7f060019;
-        public static final int item_details=0x7f060071;
-        public static final int item_imageView=0x7f060016;
-        public static final int item_list=0x7f060054;
-        public static final int item_name=0x7f060067;
-        public static final int item_price=0x7f060069;
-        public static final int item_unit=0x7f06006b;
-        public static final int item_vendor=0x7f060075;
-        public static final int listView=0x7f060050;
-        public static final int list_slidermenu=0x7f060058;
-        public static final int map=0x7f06005a;
-        public static final int map_view=0x7f06007a;
-        public static final int marketCheck=0x7f060065;
-        public static final int marketName=0x7f06002a;
-        public static final int market_list=0x7f060059;
-        public static final int market_name=0x7f06005b;
-        public static final int market_spinner=0x7f060048;
-        public static final int match_parent=0x7f06000c;
-        public static final int mon=0x7f06002c;
-        public static final int monochrome=0x7f060013;
-        public static final int new_item=0x7f060055;
-        public static final int new_vendor=0x7f060061;
-        public static final int no_groceries=0x7f06004f;
-        public static final int no_items=0x7f060053;
-        public static final int no_vendors=0x7f06005f;
-        public static final int none=0x7f060000;
-        public static final int normal=0x7f060001;
-        public static final int open=0x7f06006d;
-        public static final int openTime=0x7f060042;
-        public static final int per=0x7f06006a;
-        public static final int price=0x7f06001e;
-        public static final int priceperunit=0x7f06001c;
-        public static final int production=0x7f060007;
-        public static final int remove=0x7f060051;
-        public static final int sandbox=0x7f060008;
-        public static final int sat=0x7f06003b;
-        public static final int satellite=0x7f060002;
-        public static final int saveItem=0x7f060028;
-        public static final int saveNewMarket=0x7f060044;
-        public static final int saveVendor=0x7f060049;
-        public static final int save_vendor=0x7f060079;
-        public static final int season_end=0x7f060025;
-        public static final int season_start=0x7f060023;
-        public static final int selectCategory=0x7f06005c;
-        public static final int selectItem=0x7f06005d;
-        public static final int selectionDetails=0x7f06000b;
-        public static final int strict_sandbox=0x7f060009;
-        public static final int sun=0x7f06003e;
-        public static final int take_pic=0x7f060017;
-        public static final int terrain=0x7f060003;
-        public static final int textFri=0x7f060039;
-        public static final int textMon=0x7f06002d;
-        public static final int textSat=0x7f06003c;
-        public static final int textSun=0x7f06003f;
-        public static final int textThu=0x7f060036;
-        public static final int textTue=0x7f060030;
-        public static final int textView1=0x7f06001d;
-        public static final int textView2=0x7f06001f;
-        public static final int textView3=0x7f060024;
-        public static final int textView4=0x7f060021;
-        public static final int textWed=0x7f060033;
-        public static final int thu=0x7f060035;
-        public static final int title=0x7f060063;
-        public static final int toList=0x7f06005e;
-        public static final int toggle=0x7f06004b;
-        public static final int tue=0x7f06002f;
-        public static final int unit=0x7f060020;
-        public static final int vendor=0x7f06001b;
-        public static final int vendor_list=0x7f060060;
-        public static final int vendor_name=0x7f060046;
-        public static final int vendor_spinner=0x7f060052;
-        public static final int wed=0x7f060032;
-        public static final int wrap_content=0x7f06000d;
+        public static final int Buttons=0x7f070027;
+        public static final int Details=0x7f070018;
+        public static final int Farm=0x7f070073;
+        public static final int LinearLayout1=0x7f070014;
+        public static final int MainInfo=0x7f070015;
+        public static final int Seasons=0x7f070022;
+        public static final int Sorting=0x7f07004c;
+        public static final int Time=0x7f070041;
+        public static final int action_settings=0x7f070076;
+        public static final int addToGroceries=0x7f070026;
+        public static final int add_item=0x7f070077;
+        public static final int add_vendor=0x7f070078;
+        public static final int at=0x7f070074;
+        public static final int book_now=0x7f070010;
+        public static final int buyButton=0x7f07000a;
+        public static final int buy_now=0x7f07000f;
+        public static final int buy_with_google=0x7f07000e;
+        public static final int byType=0x7f07004d;
+        public static final int byVendor=0x7f07004e;
+        public static final int category=0x7f07001a;
+        public static final int check=0x7f070070;
+        public static final int checkBox1=0x7f070066;
+        public static final int checkFri=0x7f07003a;
+        public static final int checkMon=0x7f07002e;
+        public static final int checkSat=0x7f07003d;
+        public static final int checkSun=0x7f070040;
+        public static final int checkThu=0x7f070037;
+        public static final int checkTue=0x7f070031;
+        public static final int checkWed=0x7f070034;
+        public static final int check_organic=0x7f070047;
+        public static final int classic=0x7f070011;
+        public static final int close=0x7f07006f;
+        public static final int closeTime=0x7f070043;
+        public static final int counter=0x7f070064;
+        public static final int currency=0x7f070068;
+        public static final int dash=0x7f07006e;
+        public static final int dates=0x7f07002b;
+        public static final int days=0x7f07006c;
+        public static final int deleteItem=0x7f070029;
+        public static final int deleteMarket=0x7f070045;
+        public static final int deleteVendor=0x7f07004a;
+        public static final int details=0x7f070072;
+        public static final int drawer_layout=0x7f070056;
+        public static final int frame_container=0x7f070057;
+        public static final int fri=0x7f070038;
+        public static final int grayscale=0x7f070012;
+        public static final int holo_dark=0x7f070005;
+        public static final int holo_light=0x7f070006;
+        public static final int hybrid=0x7f070004;
+        public static final int icon=0x7f070062;
+        public static final int itemName=0x7f070019;
+        public static final int item_details=0x7f070071;
+        public static final int item_imageView=0x7f070016;
+        public static final int item_list=0x7f070054;
+        public static final int item_name=0x7f070067;
+        public static final int item_price=0x7f070069;
+        public static final int item_unit=0x7f07006b;
+        public static final int item_vendor=0x7f070075;
+        public static final int listView=0x7f070050;
+        public static final int list_slidermenu=0x7f070058;
+        public static final int map=0x7f07005a;
+        public static final int map_view=0x7f07007a;
+        public static final int marketCheck=0x7f070065;
+        public static final int marketName=0x7f07002a;
+        public static final int market_list=0x7f070059;
+        public static final int market_name=0x7f07005b;
+        public static final int market_spinner=0x7f070048;
+        public static final int match_parent=0x7f07000c;
+        public static final int mon=0x7f07002c;
+        public static final int monochrome=0x7f070013;
+        public static final int new_item=0x7f070055;
+        public static final int new_vendor=0x7f070061;
+        public static final int no_groceries=0x7f07004f;
+        public static final int no_items=0x7f070053;
+        public static final int no_vendors=0x7f07005f;
+        public static final int none=0x7f070000;
+        public static final int normal=0x7f070001;
+        public static final int open=0x7f07006d;
+        public static final int openTime=0x7f070042;
+        public static final int per=0x7f07006a;
+        public static final int price=0x7f07001e;
+        public static final int priceperunit=0x7f07001c;
+        public static final int production=0x7f070007;
+        public static final int remove=0x7f070051;
+        public static final int sandbox=0x7f070008;
+        public static final int sat=0x7f07003b;
+        public static final int satellite=0x7f070002;
+        public static final int saveItem=0x7f070028;
+        public static final int saveNewMarket=0x7f070044;
+        public static final int saveVendor=0x7f070049;
+        public static final int save_vendor=0x7f070079;
+        public static final int season_end=0x7f070025;
+        public static final int season_start=0x7f070023;
+        public static final int selectCategory=0x7f07005c;
+        public static final int selectItem=0x7f07005d;
+        public static final int selectionDetails=0x7f07000b;
+        public static final int strict_sandbox=0x7f070009;
+        public static final int sun=0x7f07003e;
+        public static final int take_pic=0x7f070017;
+        public static final int terrain=0x7f070003;
+        public static final int textFri=0x7f070039;
+        public static final int textMon=0x7f07002d;
+        public static final int textSat=0x7f07003c;
+        public static final int textSun=0x7f07003f;
+        public static final int textThu=0x7f070036;
+        public static final int textTue=0x7f070030;
+        public static final int textView1=0x7f07001d;
+        public static final int textView2=0x7f07001f;
+        public static final int textView3=0x7f070024;
+        public static final int textView4=0x7f070021;
+        public static final int textWed=0x7f070033;
+        public static final int thu=0x7f070035;
+        public static final int title=0x7f070063;
+        public static final int toList=0x7f07005e;
+        public static final int toggle=0x7f07004b;
+        public static final int tue=0x7f07002f;
+        public static final int unit=0x7f070020;
+        public static final int vendor=0x7f07001b;
+        public static final int vendor_list=0x7f070060;
+        public static final int vendor_name=0x7f070046;
+        public static final int vendor_spinner=0x7f070052;
+        public static final int wed=0x7f070032;
+        public static final int wrap_content=0x7f07000d;
     }
     public static final class integer {
-        public static final int google_play_services_version=0x7f070000;
+        public static final int google_play_services_version=0x7f080000;
     }
     public static final class layout {
         public static final int activity_edit_item=0x7f030000;
@@ -600,129 +600,129 @@ containing a value of this type.
         public static final int shop_market=0x7f0b0009;
     }
     public static final class string {
-        public static final int action_settings=0x7f040021;
-        public static final int album_name=0x7f040032;
-        public static final int app_name=0x7f040020;
-        public static final int auth_client_needs_enabling_title=0x7f040001;
-        public static final int auth_client_needs_installation_title=0x7f040002;
-        public static final int auth_client_needs_update_title=0x7f040003;
-        public static final int auth_client_play_services_err_notification_msg=0x7f040004;
-        public static final int auth_client_requested_by_msg=0x7f040005;
-        public static final int auth_client_using_bad_version_title=0x7f040000;
+        public static final int action_settings=0x7f050021;
+        public static final int album_name=0x7f050032;
+        public static final int app_name=0x7f050020;
+        public static final int auth_client_needs_enabling_title=0x7f050001;
+        public static final int auth_client_needs_installation_title=0x7f050002;
+        public static final int auth_client_needs_update_title=0x7f050003;
+        public static final int auth_client_play_services_err_notification_msg=0x7f050004;
+        public static final int auth_client_requested_by_msg=0x7f050005;
+        public static final int auth_client_using_bad_version_title=0x7f050000;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_button=0x7f040011;
+        public static final int common_google_play_services_enable_button=0x7f050011;
         /**  Message in confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_enable_text=0x7f040010;
+        public static final int common_google_play_services_enable_text=0x7f050010;
         /**  Title of confirmation dialog informing user they need to enable
         Google Play services in application settings [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_enable_title=0x7f04000f;
+        public static final int common_google_play_services_enable_title=0x7f05000f;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int common_google_play_services_error_notification_requested_by_msg=0x7f04000a;
+        public static final int common_google_play_services_error_notification_requested_by_msg=0x7f05000a;
         /**  Button in confirmation dialog for installing Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_button=0x7f04000e;
+        public static final int common_google_play_services_install_button=0x7f05000e;
         /**  (For phones) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_phone=0x7f04000c;
+        public static final int common_google_play_services_install_text_phone=0x7f05000c;
         /**  (For tablets) Message in confirmation dialog informing user that
         they need to install Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_install_text_tablet=0x7f04000d;
+        public static final int common_google_play_services_install_text_tablet=0x7f05000d;
         /**  Title of confirmation dialog informing user that they need to install
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_install_title=0x7f04000b;
+        public static final int common_google_play_services_install_title=0x7f05000b;
         /**  Message in confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_invalid_account_text=0x7f040017;
+        public static final int common_google_play_services_invalid_account_text=0x7f050017;
         /**  Title of confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_invalid_account_title=0x7f040016;
+        public static final int common_google_play_services_invalid_account_title=0x7f050016;
         /**   Title for notification shown when GooglePlayServices needs to be enabled for an
         application to work. [CHAR LIMIT=70] 
          */
-        public static final int common_google_play_services_needs_enabling_title=0x7f040009;
+        public static final int common_google_play_services_needs_enabling_title=0x7f050009;
         /**  Message in confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_network_error_text=0x7f040015;
+        public static final int common_google_play_services_network_error_text=0x7f050015;
         /**  Title of confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_network_error_title=0x7f040014;
+        public static final int common_google_play_services_network_error_title=0x7f050014;
         /**   Title for notification shown when GooglePlayServices needs to be installed
         for an application to work. [CHAR LIMIT=70] 
          */
-        public static final int common_google_play_services_notification_needs_installation_title=0x7f040007;
+        public static final int common_google_play_services_notification_needs_installation_title=0x7f050007;
         /**   Title for notification shown when GooglePlayServices needs to be updated for an
         application to work. [CHAR LIMIT=70] 
          */
-        public static final int common_google_play_services_notification_needs_update_title=0x7f040008;
+        public static final int common_google_play_services_notification_needs_update_title=0x7f050008;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int common_google_play_services_notification_ticker=0x7f040006;
+        public static final int common_google_play_services_notification_ticker=0x7f050006;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f040018;
+        public static final int common_google_play_services_unknown_issue=0x7f050018;
         /**  Message in confirmation dialog informing user that date on the device is not correct,
     causing certificate checks to fail. [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_date_text=0x7f04001b;
+        public static final int common_google_play_services_unsupported_date_text=0x7f05001b;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_text=0x7f04001a;
+        public static final int common_google_play_services_unsupported_text=0x7f05001a;
         /**  Title of confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_unsupported_title=0x7f040019;
+        public static final int common_google_play_services_unsupported_title=0x7f050019;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f04001c;
+        public static final int common_google_play_services_update_button=0x7f05001c;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_update_text=0x7f040013;
+        public static final int common_google_play_services_update_text=0x7f050013;
         /**  Title of confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_title=0x7f040012;
+        public static final int common_google_play_services_update_title=0x7f050012;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f04001d;
+        public static final int common_signin_button_text=0x7f05001d;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f04001e;
+        public static final int common_signin_button_text_long=0x7f05001e;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f040035;
-        public static final int enter_market_name=0x7f040025;
-        public static final int hello_world=0x7f040034;
-        public static final int menu_delete=0x7f04002d;
-        public static final int menu_delete_market=0x7f04002f;
-        public static final int menu_edit=0x7f04002e;
-        public static final int menu_edit_market=0x7f040030;
-        public static final int menu_insert=0x7f04002c;
-        public static final int title_activity_add_item=0x7f04002b;
-        public static final int title_activity_add_vendor=0x7f040027;
-        public static final int title_activity_edit_vendor=0x7f040031;
-        public static final int title_activity_find_markets=0x7f040022;
-        public static final int title_activity_grocery_list=0x7f04002a;
-        public static final int title_activity_inventory=0x7f040023;
-        public static final int title_activity_market_list=0x7f040033;
-        public static final int title_activity_new_market=0x7f040024;
-        public static final int title_activity_shop=0x7f040028;
-        public static final int title_activity_shop_inventory=0x7f040026;
-        public static final int title_activity_shop_market=0x7f040029;
+        public static final int desc_list_item_icon=0x7f050035;
+        public static final int enter_market_name=0x7f050025;
+        public static final int hello_world=0x7f050034;
+        public static final int menu_delete=0x7f05002d;
+        public static final int menu_delete_market=0x7f05002f;
+        public static final int menu_edit=0x7f05002e;
+        public static final int menu_edit_market=0x7f050030;
+        public static final int menu_insert=0x7f05002c;
+        public static final int title_activity_add_item=0x7f05002b;
+        public static final int title_activity_add_vendor=0x7f050027;
+        public static final int title_activity_edit_vendor=0x7f050031;
+        public static final int title_activity_find_markets=0x7f050022;
+        public static final int title_activity_grocery_list=0x7f05002a;
+        public static final int title_activity_inventory=0x7f050023;
+        public static final int title_activity_market_list=0x7f050033;
+        public static final int title_activity_new_market=0x7f050024;
+        public static final int title_activity_shop=0x7f050028;
+        public static final int title_activity_shop_inventory=0x7f050026;
+        public static final int title_activity_shop_market=0x7f050029;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
-        public static final int wallet_buy_button_place_holder=0x7f04001f;
+        public static final int wallet_buy_button_place_holder=0x7f05001f;
     }
     public static final class style {
         /** 
@@ -746,20 +746,21 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080004;
+        public static final int AppBaseTheme=0x7f040005;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080005;
-        public static final int WalletFragmentDefaultButtonTextAppearance=0x7f080002;
-        public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f080001;
-        public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f080000;
+        public static final int AppTheme=0x7f040006;
+        public static final int Theme_IAPTheme=0x7f040000;
+        public static final int WalletFragmentDefaultButtonTextAppearance=0x7f040003;
+        public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f040002;
+        public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f040001;
         /** 
          Default style of the wallet fragment that will be used if not set explicitly
          when fragment is created
     
          */
-        public static final int WalletFragmentDefaultStyle=0x7f080003;
+        public static final int WalletFragmentDefaultStyle=0x7f040004;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.
