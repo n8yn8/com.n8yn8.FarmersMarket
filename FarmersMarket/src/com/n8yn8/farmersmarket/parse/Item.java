@@ -200,4 +200,12 @@ public class Item extends ParseObject {
 		this.selected = selected;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object o) {
+		return this.getObjectId().equals(((Item) o).getObjectId());
+	}
+	
 }

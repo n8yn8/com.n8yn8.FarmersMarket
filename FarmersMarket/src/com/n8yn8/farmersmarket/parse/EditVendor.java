@@ -32,6 +32,7 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 
 	private String TAG = "EditVendor";
 	MarketCheckListAdapter marketAdapter;
+	List<Market> checkedMarkets;
 	EditText vendorNameField;
 	ListView marketName;
 	CheckBox isOrganic;
@@ -70,8 +71,9 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 					}
 				}
 			});
+		} else {
+			getMarkets();
 		}
-		getMarkets();
 
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 
@@ -100,11 +102,13 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 		vendorNameField.setText(vendor.getName());
 		ParseRelation<Market> relation = vendor.getRelation("vendor_at_market");
 		relation.getQuery().findInBackground(new FindCallback<Market>() {
-			public void done(List<Market> checkedMarkets, ParseException e) {
+			public void done(List<Market> relationMarkets, ParseException e) {
 				if (e != null) {
 					// There was an error
 				} else {
-					Log.d(TAG, checkedMarkets.toString());
+					Log.d(TAG, "populate fields: " + relationMarkets.toString());
+					checkedMarkets = relationMarkets;
+					getMarkets();
 				}
 			}
 		});
@@ -116,16 +120,18 @@ public class EditVendor extends Activity implements NoNameAlertFragment.NoticeDi
 		query.findInBackground(new FindCallback<Market>() {
 			public void done(List<Market> markets, ParseException e) {
 				if (e == null) {
-					//TODO compare 
-					/*for (int i = 0; i < markets.size(); i++) {
-						for (int j = 0; j < checkedMarkets.size(); j++)
-						if (markets.get(i).getObjectId() == checkedMarkets.get(j).getObjectId()) {
-							markets.get(i).setSelected(true);
-							Log.d(TAG, "Market match " + markets.get(i).getObjectId() + " " + checkedMarkets.get(j).getObjectId());
-						} else {
-							Log.d(TAG, "Markets not in relation " + markets.get(i).getObjectId() + " " + checkedMarkets.get(j).getObjectId());
+					if (!newVendor) {
+						for (int i = 0; i < markets.size(); i++) {
+							for (int j = 0; j < checkedMarkets.size(); j++) {
+								if (markets.get(i).equals(checkedMarkets.get(j))) {
+									markets.get(i).setSelected(true);
+									Log.d(TAG, "Market match " + markets.get(i).getObjectId() + " " + checkedMarkets.get(j).getObjectId());
+								} else {
+									Log.d(TAG, "Markets not in relation " + markets.get(i).getObjectId() + " " + checkedMarkets.get(j).getObjectId());
+								}
+							}
 						}
-					}*/
+					}
 					Log.d(TAG, "getMarkets retreived "+markets.toString());
 					populateMarkets(markets);
 				} else {

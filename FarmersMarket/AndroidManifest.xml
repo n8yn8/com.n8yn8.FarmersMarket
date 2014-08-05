@@ -78,7 +78,7 @@
             android:label="@string/title_activity_new_market" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.ShopMarket"
+            android:name="com.n8yn8.farmersmarket.parse.ShopMarket"
             android:label="@string/title_activity_shop_market"
             android:parentActivityName="com.n8yn8.farmersmarket.MarketList" >
             <meta-data

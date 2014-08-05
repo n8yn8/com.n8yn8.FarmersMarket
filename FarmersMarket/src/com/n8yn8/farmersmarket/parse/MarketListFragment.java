@@ -22,7 +22,6 @@ import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.R;
-import com.n8yn8.farmersmarket.ShopMarket;
 import com.parse.DeleteCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
@@ -105,7 +104,7 @@ public class MarketListFragment extends Fragment {
 	
 	private void startShopping(Market market){
 		Intent intent = new Intent(this.getActivity(), ShopMarket.class);
-		intent.putExtra("market_id", market.get_ID());
+		intent.putExtra("market_id", market.getObjectId());
 		intent.putExtra("market_name", market.getName());
 		startActivity(intent);
 	}
