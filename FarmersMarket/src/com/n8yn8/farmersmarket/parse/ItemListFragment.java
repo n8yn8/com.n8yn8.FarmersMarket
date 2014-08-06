@@ -95,10 +95,12 @@ public class ItemListFragment extends Fragment {
 			return true;
 		case R.id.add_item:
 			intent = new Intent(this.getActivity(), EditItem.class);
+			intent.putExtra("new_item", "true");
 			startActivityForResult(intent, ACTIVITY_CREATE);
 			return true;
 		case R.id.add_vendor:
 			intent = new Intent(this.getActivity(), EditVendor.class);
+			intent.putExtra("new_vendor", "true");
 			startActivityForResult(intent, ACTIVITY_CREATE);
 			return true;
 		default:

@@ -97,6 +97,7 @@ public class VendorListFragment extends Fragment {
 			return true;
         case R.id.add_item:
 			intent = new Intent(this.getActivity(), EditItem.class);
+			intent.putExtra("new_item", "true");
 			startActivityForResult(intent, ACTIVITY_CREATE_ITEM);
 			return true;
 		case R.id.add_vendor:

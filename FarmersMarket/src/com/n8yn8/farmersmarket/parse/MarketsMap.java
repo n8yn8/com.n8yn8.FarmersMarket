@@ -25,7 +25,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.n8yn8.farmersmarket.R;
-import com.n8yn8.farmersmarket.ShopMarket;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;

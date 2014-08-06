@@ -157,7 +157,6 @@ public class ShopMarket extends Activity {
 					} else { 
 						setAdapter(items);
 					}
-					
 				} else {
 					Log.e(TAG, e.getMessage());
 				}
@@ -166,9 +165,7 @@ public class ShopMarket extends Activity {
 	}
 	
 	private void setAdapter(List<Item> items) {
-		
 		adapter = new ItemCheckListAdapter(this, items);
-		
 		list=(ListView)findViewById(R.id.selectItem);
 		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		list.setAdapter(adapter);
@@ -198,14 +195,17 @@ public class ShopMarket extends Activity {
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		Intent intent;
 		switch(item.getItemId()) {
 		case R.id.add_item:
-			Intent newItem = new Intent(this, EditItem.class);
-			startActivityForResult(newItem, ACTIVITY_CREATE);
+			intent = new Intent(this, EditItem.class);
+			intent.putExtra("new_item", "true");
+			startActivityForResult(intent, ACTIVITY_CREATE);
 			return true;
 		case R.id.add_vendor:
-			Intent newVendor = new Intent(this, EditVendor.class);
-			startActivityForResult(newVendor, ACTIVITY_CREATE);
+			intent = new Intent(this, EditVendor.class);
+			intent.putExtra("new_vendor", "true");
+			startActivityForResult(intent, ACTIVITY_CREATE);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
