@@ -153,9 +153,11 @@ public class ShopMarket extends Activity {
 				if (e == null) {
 					Log.v(TAG, "query returned: " + items.toString());
 					if (items.isEmpty()) {
+						setAdapter(items);
 						noItems.setText("No items are at this market in this category.");
 					} else { 
 						setAdapter(items);
+						noItems.setText("Check items to add to the grocery list.");
 					}
 				} else {
 					Log.e(TAG, e.getMessage());
