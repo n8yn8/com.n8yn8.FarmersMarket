@@ -29,6 +29,7 @@
         <item >Market List</item>
         <item >Vendor List</item>
         <item >Item List</item>
+        <item >Log Out</item>
     </string-array>
     
     <!-- Nav Drawer List Item Icons -->
@@ -37,6 +38,7 @@
         <item>@drawable/ic_grocery_list</item>
         <item>@drawable/ic_launcher</item>
         <item>@drawable/ic_vendor</item>
+        <item>@drawable/ic_item</item>
         <item>@drawable/ic_item</item>
     </array>
     

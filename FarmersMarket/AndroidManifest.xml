@@ -26,6 +26,7 @@
 
     <application
         android:allowBackup="true"
+        android:name="ParseApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -37,7 +38,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.n8yn8.farmersmarket.MainActivity"
+            android:name="com.n8yn8.farmersmarket.parse.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,77 +52,83 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.MarketsMap"
+            android:name=".MarketsMap"
             android:label="@string/title_activity_find_markets"
-            android:parentActivityName="com.n8yn8.farmersmarket.MarketList" >
+            android:parentActivityName=".MarketList" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MarketList" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.parse.MarketsMap"
+            android:name=".parse.MarketsMap"
             android:label="@string/title_activity_find_markets"
-            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.Inventory"
-            android:label="@string/title_activity_inventory" 
-            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            android:name=".Inventory"
+            android:label="@string/title_activity_inventory"
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.EditMarket"
+            android:name=".EditMarket"
             android:label="@string/title_activity_new_market" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.parse.EditMarket"
+            android:name=".parse.EditMarket"
             android:label="@string/title_activity_new_market" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.parse.ShopMarket"
+            android:name=".parse.ShopMarket"
             android:label="@string/title_activity_shop_market"
-            android:parentActivityName="com.n8yn8.farmersmarket.MarketList" >
+            android:parentActivityName=".MarketList" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MarketList" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.GroceryList"
+            android:name=".parse.GroceryList"
             android:label="@string/title_activity_grocery_list"
-            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.EditItem"
+            android:name=".EditItem"
             android:label="@string/title_activity_add_item" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.parse.EditItem"
+            android:name=".parse.EditItem"
             android:label="@string/title_activity_add_item" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.EditVendor"
+            android:name=".EditVendor"
             android:label="@string/title_activity_edit_vendor" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.parse.EditVendor"
+            android:name=".parse.EditVendor"
             android:label="@string/title_activity_edit_vendor" >
         </activity>
         <activity
-            android:name="com.n8yn8.farmersmarket.MarketList"
+            android:name=".MarketList"
             android:label="@string/title_activity_market_list"
-            android:parentActivityName="com.n8yn8.farmersmarket.MainActivity" >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.n8yn8.farmersmarket.MainActivity" />
         </activity>
+        
     </application>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

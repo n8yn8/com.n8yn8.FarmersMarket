@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -18,18 +19,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.n8yn8.farmersmarket.adapter.NavDrawerListAdapter;
-import com.n8yn8.farmersmarket.fragments.GroceryListFragment;
 import com.n8yn8.farmersmarket.models.NavDrawerItem;
-import com.n8yn8.farmersmarket.parse.Item;
+import com.n8yn8.farmersmarket.parse.GroceryListFragment;
 import com.n8yn8.farmersmarket.parse.ItemListFragment;
-import com.n8yn8.farmersmarket.parse.Market;
+import com.n8yn8.farmersmarket.parse.LoginActivity;
 import com.n8yn8.farmersmarket.parse.MarketListFragment;
-import com.n8yn8.farmersmarket.parse.Vendor;
 import com.n8yn8.farmersmarket.parse.VendorListFragment;
-import com.parse.Parse;
-import com.parse.ParseObject;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseUser;
 
 public class MainActivity extends Activity {
+	
+	String TAG = "MainActivity";
 	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -50,16 +51,12 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		//Initialize TestFlight with your app token.
         //TestFlight.takeOff(getApplication(), "17759818-827d-469a-80a5-1db253d778bd");
 		setContentView(R.layout.activity_main);
-		
-		//Switch imports to parse package to use parse.
-		ParseObject.registerSubclass(Market.class);
-		ParseObject.registerSubclass(Vendor.class);
-		ParseObject.registerSubclass(Item.class);
-		Parse.initialize(this, "RNk2C6FdTlpXuNWgCNkF4Hk4Q38XrUpyxCFISFo7", "nRVqyC5iuOLANNWmjwq41VAS1bJf2Hl6IJ4Ad4Sy");
 		
 		mTitle = mDrawerTitle = getTitle();
 		 
@@ -79,12 +76,12 @@ public class MainActivity extends Activity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         // Market List
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Photos
+        // Vendor List
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        // Communities, Will add a counter here
+        // Item List
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-        // Pages
-        //navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+        // Log Out
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         // What's hot, We  will add a counter here
         //navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
          
@@ -107,24 +104,37 @@ public class MainActivity extends Activity {
                 R.string.app_name // nav drawer close - description for accessibility
         ){
             public void onDrawerClosed(View view) {
+            	Log.v(TAG, "onDrawerClosed");
                 getActionBar().setTitle(mTitle);
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
  
             public void onDrawerOpened(View drawerView) {
+            	Log.v(TAG, "onDrawerOpened");
                 getActionBar().setTitle(mDrawerTitle);
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
- 
+        
         if (savedInstanceState == null) {
+        	Log.v(TAG, "No Saved instance State");
             // on first time display view for first nav item
             displayView(0);
         }
+ 
+        if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+        	Log.v(TAG, "Anonymous User detected");
+        	Intent intent = new Intent(this, LoginActivity.class);
+        	startActivity(intent);
+        	//displayView(4);
+        }
+        
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+        
+        
 	}
 
 	@Override
@@ -154,6 +164,7 @@ public class MainActivity extends Activity {
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+    	Log.v(TAG, "onPrepareOptionsMenu");
         // if nav drawer is opened, hide the action items
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
@@ -202,6 +213,7 @@ public class MainActivity extends Activity {
      * Diplaying fragment view for selected nav drawer list item
      * */
     private void displayView(int position) {
+    	Log.v(TAG, "displayView");
         // update the main content by replacing fragments
         Fragment fragment = null;
         switch (position) {
@@ -217,10 +229,13 @@ public class MainActivity extends Activity {
         case 3:
         	fragment = new ItemListFragment();
             break;
-        /*case 4:
-            fragment = new PagesFragment();
+        case 4:
+        	ParseUser.logOut();
+        	Intent intent = new Intent(this, LoginActivity.class);
+        	startActivity(intent);
+            //fragment = new LogInFragment();
             break;
-        case 5:
+        /*case 5:
             fragment = new WhatsHotFragment();
             break;*/
  
