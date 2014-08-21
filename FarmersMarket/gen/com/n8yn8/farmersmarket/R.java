@@ -1478,17 +1478,18 @@ containing a value of this type.
         public static final int ic_item=0x7f020075;
         public static final int ic_item_holder=0x7f020076;
         public static final int ic_launcher=0x7f020077;
-        public static final int ic_plusone_medium_off_client=0x7f020078;
-        public static final int ic_plusone_small_off_client=0x7f020079;
-        public static final int ic_plusone_standard_off_client=0x7f02007a;
-        public static final int ic_plusone_tall_off_client=0x7f02007b;
-        public static final int ic_vendor=0x7f02007c;
-        public static final int list_item_bg_normal=0x7f02007d;
-        public static final int list_item_bg_pressed=0x7f02007e;
-        public static final int list_selector=0x7f02007f;
-        public static final int old_map=0x7f020080;
-        public static final int powered_by_google_dark=0x7f020081;
-        public static final int powered_by_google_light=0x7f020082;
+        public static final int ic_logout=0x7f020078;
+        public static final int ic_plusone_medium_off_client=0x7f020079;
+        public static final int ic_plusone_small_off_client=0x7f02007a;
+        public static final int ic_plusone_standard_off_client=0x7f02007b;
+        public static final int ic_plusone_tall_off_client=0x7f02007c;
+        public static final int ic_vendor=0x7f02007d;
+        public static final int list_item_bg_normal=0x7f02007e;
+        public static final int list_item_bg_pressed=0x7f02007f;
+        public static final int list_selector=0x7f020080;
+        public static final int old_map=0x7f020081;
+        public static final int powered_by_google_dark=0x7f020082;
+        public static final int powered_by_google_light=0x7f020083;
     }
     public static final class id {
         public static final int Buttons=0x7f080061;

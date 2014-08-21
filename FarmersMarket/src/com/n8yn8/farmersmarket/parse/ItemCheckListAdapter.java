@@ -82,7 +82,8 @@ public class ItemCheckListAdapter extends BaseAdapter {
 		holder.unit.setText(items.get(position).getUnit());
 		holder.vendor.setText(items.get(position).getVendorName());
 		holder.checkbox.setFocusable(false);
-		holder.checkbox.setChecked(items.get(position).isInGroceries());
+		//TODO setChecked if in user's groceries.
+		//holder.checkbox.setChecked(items.get(position).isInGroceries());
 		return view;
 	}
 } 

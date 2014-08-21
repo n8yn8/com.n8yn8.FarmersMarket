@@ -1,7 +1,8 @@
 package com.n8yn8.farmersmarket.parse;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,7 +24,10 @@ import com.n8yn8.farmersmarket.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 public class ShopMarket extends Activity {
 	
@@ -42,12 +46,17 @@ public class ShopMarket extends Activity {
 	TextView noItems;
 	TextView marketName;
 	ListView list;
+	ParseUser currentUser;
+	ParseRelation<Item> groceries;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shop_market);
+		
+		currentUser = ParseUser.getCurrentUser();
+		
 		noItems = (TextView)findViewById(R.id.no_items);
 		marketName = (TextView)findViewById(R.id.market_name);
 		
@@ -79,18 +88,15 @@ public class ShopMarket extends Activity {
 
 			public void onClick(View view) {
 				List<Item> items = adapter.items;
+				groceries = currentUser.getRelation("groceries");
 				for (int i = 0; i < items.size(); i++) {
 					Item item = items.get(i);
 					if (item.isSelected()) {
 						Log.v(TAG + " Selected", item.getName());
-						item.setInGroceries(true);
-						try {
-							item.save();
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+						groceries.add(item);
 					}
 				}
+				currentUser.saveInBackground();
 				Toast.makeText(getBaseContext(), "Selected items added to grocery list", Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -140,11 +146,12 @@ public class ShopMarket extends Activity {
 		Log.i(TAG, "fillData");
 		
 		ParseQuery<Item> query = ParseQuery.getQuery("item");
-		for(int i = 0; i < vendors.size(); i++) {
-			query.whereEqualTo("vendor", vendors.get(i));
-		}
+		query.whereContainedIn("vendor", vendors);
+		
 		if(category!=null){
 			query.whereEqualTo("type", category);
+		} else {
+			query.orderByAscending("type");
 		}
 				
 		query.findInBackground(new FindCallback<Item>() {

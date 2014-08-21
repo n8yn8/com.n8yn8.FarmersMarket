@@ -36,6 +36,7 @@ import com.n8yn8.farmersmarket.Contract.FeedEntry;
 import com.n8yn8.farmersmarket.FroyoAlbumDirFactory;
 import com.n8yn8.farmersmarket.R;
 import com.n8yn8.farmersmarket.fragments.NoNameAlertFragment;
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
@@ -43,23 +44,26 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 public class EditItem extends Activity implements NoNameAlertFragment.NoticeDialogListener {
 	private static final String TAG = "EditItem";
-	
+
 	private AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 	EditText itemName;
 	Spinner categorySpinner, vendorSpinner, startSpinner, endSpinner;
 	ArrayAdapter<CharSequence> categoryAdapter, monthAdapter;
 	ArrayAdapter<Vendor> vendorAdapter;
-	String name, category, added, price, unit, vendorName, start, end, photo, vendorId, mRowId;
+	String name, category, price, unit, vendorName, start, end, photo, vendorId, mRowId;
 	private String mCurrentPhotoPath = "";
 	EditText setPrice, setUnit;
-	CheckBox isAdded;
+	CheckBox inGroceriesCheckBox;
 	Item item;
 	Vendor thisVendor;
 	boolean itemLoaded, vendorsLoaded;
+	ParseUser currentUser;
 
 	//private LruCache<String, Bitmap> mMemoryCache;
 	static int TAKE_PICTURE = 1;
@@ -87,18 +91,18 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		endSpinner = (Spinner) findViewById(R.id.season_end);
 		setPrice = (EditText) findViewById(R.id.price);
 		setUnit = (EditText) findViewById(R.id.unit);
-		isAdded = (CheckBox) findViewById(R.id.addToGroceries);
-		added = "no";
+		inGroceriesCheckBox = (CheckBox) findViewById(R.id.addToGroceries);
 		Button confirmButton = (Button) findViewById(R.id.saveItem);
 		Button deleteButton = (Button) findViewById(R.id.deleteItem);
-		
+		currentUser = ParseUser.getCurrentUser();
+
 		// Get max available VM memory, exceeding this amount will throw an
-	    // OutOfMemory exception. Stored in kilobytes as LruCache takes an
-	    // int in its constructor.
-	    //final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-	    // Use 1/8th of the available memory for this memory cache.
-	    //final int cacheSize = maxMemory / 2;
-	    /*mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+		// OutOfMemory exception. Stored in kilobytes as LruCache takes an
+		// int in its constructor.
+		//final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+		// Use 1/8th of the available memory for this memory cache.
+		//final int cacheSize = maxMemory / 2;
+		/*mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 	        @Override
 	        protected int sizeOf(String key, Bitmap bitmap) {
 	            // The cache size will be measured in kilobytes rather than
@@ -117,9 +121,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		} else {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
-		
+
 		initializeSpinners();
-		
+
 		Bundle extras = getIntent().getExtras();
 		newItem = extras.get("new_item").equals("true");
 		if (!newItem) {
@@ -139,9 +143,9 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 				}
 			});
 		}
-		
+
 		if (!newItem){
-			
+
 		}
 
 		confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +154,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 				Log.d(TAG, "itemName on Save button = "+itemName.getText().toString());
 				if(saveState()) {
 					setResult(Activity.RESULT_OK);
-	                finish();
+					finish();
 				} else {
 					showNoticeDialog();
 				}
@@ -179,11 +183,11 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
+
 
 			}
 		});
-		
+
 		ParseQuery<Vendor> query = ParseQuery.getQuery("vendor");
 		query.findInBackground(new FindCallback<Vendor>() {
 
@@ -192,17 +196,17 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 				if (e == null) {
 					Log.i(TAG, "Vendor list query finished successfully");
 					loadVendorSpinner(vendors);
-					
+
 				} else {
 					Log.e(TAG, "Error loading Vendor list" + e.getMessage());
 				}
-				
+
 			}
-			
+
 		});
 
-		
-		
+
+
 		monthAdapter = ArrayAdapter.createFromResource(this, R.array.months_array, android.R.layout.simple_spinner_item);
 		monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		startSpinner.setAdapter(monthAdapter);
@@ -214,7 +218,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
+
 
 			}
 		});
@@ -227,12 +231,12 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				
+
 
 			}
 		});
 	}
-	
+
 	private void loadVendorSpinner (List<Vendor> vendors) {
 		Log.i(TAG, "loadVendorSpinner");
 		vendorAdapter = new VendorSpinnerAdapter(this, android.R.id.text1, vendors);
@@ -254,55 +258,68 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		});
 		vendorsLoaded = true;
 	}
-	
+
 	private void populateFields() {
 		Log.i(TAG, "populateFields");
-			
-			itemName.setText(item.getName());
-			int cPosition = categoryAdapter.getPosition(item.getType());
-			categorySpinner.setSelection(cPosition);
 
-			setPrice.setText(item.getPrice());
-			setUnit.setText(item.getUnit());
-			
-			//TODO set vendor spinner
-			thisVendor = (Vendor) item.get("vendor");
-			try {
-				thisVendor.fetchIfNeeded();
-			} catch (ParseException e1) {
-				Log.e(TAG, "Error fetching vendor");
-				e1.printStackTrace();
+		itemName.setText(item.getName());
+		int cPosition = categoryAdapter.getPosition(item.getType());
+		categorySpinner.setSelection(cPosition);
+
+		setPrice.setText(item.getPrice());
+		setUnit.setText(item.getUnit());
+
+		thisVendor = (Vendor) item.get("vendor");
+		thisVendor.fetchIfNeededInBackground(new GetCallback<Vendor>() {
+
+			@Override
+			public void done(Vendor object, ParseException e) {
+				Log.d(TAG, "thisVendor = " + thisVendor.getName());
+
+				int vPosition = vendorAdapter.getPosition(thisVendor);
+				Log.d(TAG, "position of vendor = " + vPosition);
+				vendorSpinner.setSelection(vPosition);
 			}
-			Log.d(TAG, "thisVendor = " + thisVendor.getName());
-			
-			int vPosition = vendorAdapter.getPosition(thisVendor);
-			Log.d(TAG, "position of vendor = " + vPosition);
-			vendorSpinner.setSelection(vPosition);
-			
-			int sPosition = monthAdapter.getPosition(item.getSeasonStart());
-			startSpinner.setSelection(sPosition);
-			
-			int ePosition = monthAdapter.getPosition(item.getSeasonEnd());
-			endSpinner.setSelection(ePosition);
 
-			if(added!=null)
-				isAdded.setChecked(item.isInGroceries());
-			
-			photoFile = item.getParseFile("photoFile");
-			if (photoFile != null) {
-				mImageView.setParseFile(photoFile);
-				mImageView.loadInBackground(new GetDataCallback () {
+		});
 
-					@Override
-					public void done(byte[] data, ParseException e) {
-						if (e != null) {
-							Toast.makeText(getApplicationContext(), "Error loading image", Toast.LENGTH_SHORT).show();
-						}
-						
+		int sPosition = monthAdapter.getPosition(item.getSeasonStart());
+		startSpinner.setSelection(sPosition);
+
+		int ePosition = monthAdapter.getPosition(item.getSeasonEnd());
+		endSpinner.setSelection(ePosition);
+
+		//TODO detect if already in groceries.
+		ParseRelation<Item> groceries = currentUser.getRelation("groceries");
+		ParseQuery<Item> query = ParseQuery.getQuery("item");
+		query.whereEqualTo("item", item);
+		query.countInBackground(new CountCallback() {
+			public void done(int count, ParseException e) {
+				if (e == null) {
+					inGroceriesCheckBox.setChecked(count!=0);
+					Log.d(TAG, "count = " + count);
+				} else {
+					// The request failed
+				}
+			}
+		});
+
+
+		photoFile = item.getParseFile("photoFile");
+		if (photoFile != null) {
+			mImageView.setParseFile(photoFile);
+			mImageView.loadInBackground(new GetDataCallback () {
+
+				@Override
+				public void done(byte[] data, ParseException e) {
+					if (e != null) {
+						Toast.makeText(getApplicationContext(), "Error loading image", Toast.LENGTH_SHORT).show();
 					}
-					
-				});
-			}
+
+				}
+
+			});
+		}
 	}
 
 	public void newVendor(){
@@ -342,7 +359,7 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		name = itemName.getText().toString();
 		price = setPrice.getText().toString();
 		unit = setUnit.getText().toString();
-		
+
 		if (newItem) {
 			item = new Item();
 		}
@@ -355,14 +372,14 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		item.put("vendor", thisVendor);
 		item.setSeasonStart(start);
 		item.setSeasonEnd(end);
-		item.setInGroceries(isAdded.isChecked());
+		item.setInGroceries(inGroceriesCheckBox.isChecked());
 		item.setPhoto(mCurrentPhotoPath);
-		
+
 		if(imageBitmap != null) {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-	        byte[] scaledData = bos.toByteArray();
-	        photoFile = new ParseFile("meal_photo.jpg", scaledData);
+			imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+			byte[] scaledData = bos.toByteArray();
+			photoFile = new ParseFile("meal_photo.jpg", scaledData);
 			photoFile.saveInBackground(new SaveCallback() {
 
 				public void done(ParseException e) {
@@ -380,29 +397,37 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 			});
 			item.setPhotoFile(photoFile);
 		}
+
 		item.saveInBackground(new SaveCallback() {
-				 
-		        @Override
-		        public void done(ParseException e) {
-		            if (e == null) {
-		            	Toast.makeText(
-		                        getApplicationContext(),
-		                        "Item saved successfully",
-		                        Toast.LENGTH_SHORT).show();
-		            	
-		            } else {
-		                Toast.makeText(
-		                        getApplicationContext(),
-		                        "Error saving Item: " + e.getMessage(),
-		                        Toast.LENGTH_SHORT).show();
-		                Log.e(TAG, "Error saving: " + e.getMessage());
-		            }
-		        }
-		 
-		    });
+
+			@Override
+			public void done(ParseException e) {
+				if (e == null) {
+					if (inGroceriesCheckBox.isChecked()) {
+						ParseRelation<Item> groceries = currentUser.getRelation("groceries");
+						groceries.add(item);
+						currentUser.saveInBackground();
+					}
+					Toast.makeText(
+							getApplicationContext(),
+							"Item saved successfully",
+							Toast.LENGTH_SHORT).show();
+
+				} else {
+					Toast.makeText(
+							getApplicationContext(),
+							"Error saving Item: " + e.getMessage(),
+							Toast.LENGTH_SHORT).show();
+					Log.e(TAG, "Error saving: " + e.getMessage());
+				}
+			}
+
+		});
+
+
 		return (!name.equals(""));
 	}
-	
+
 	private void deleteState() {
 		Log.i(TAG, "deleteState");
 		setResult(RESULT_CANCELED);
@@ -420,26 +445,26 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		getMenuInflater().inflate(R.menu.edit_item, menu);
 		return true;
 	}
-	
+
 	public void showNoticeDialog() {
 		Log.i(TAG, "showNoticeDialog");
-        // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = new NoNameAlertFragment();
-        dialog.show(getFragmentManager(), "NoticeDialogFragment");
-    }
+		// Create an instance of the dialog fragment and show it
+		DialogFragment dialog = new NoNameAlertFragment();
+		dialog.show(getFragmentManager(), "NoticeDialogFragment");
+	}
 
-    // The dialog fragment receives a reference to this Activity through the
-    // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the NoticeDialogFragment.NoticeDialogListener interface
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        Log.i(TAG, "Positive button pressed");
-    }
+	// The dialog fragment receives a reference to this Activity through the
+	// Fragment.onAttach() callback, which it uses to call the following methods
+	// defined by the NoticeDialogFragment.NoticeDialogListener interface
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		Log.i(TAG, "Positive button pressed");
+	}
 
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-    	deleteState();
-    }
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+		deleteState();
+	}
 
 	public void takePic(View v){
 		Log.i(TAG, "takePic");
@@ -519,16 +544,16 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 		Log.i(TAG, "onActivityResult");
 		if (requestCode == TAKE_PICTURE && resultCode==RESULT_OK){
 			Bundle extras = data.getExtras();
-	        imageBitmap = (Bitmap) extras.get("data");
-	        mImageView.setImageBitmap(imageBitmap);
-	        
+			imageBitmap = (Bitmap) extras.get("data");
+			mImageView.setImageBitmap(imageBitmap);
+
 			/*if (mCurrentPhotoPath != null) {
 				saveBitmap();
 				mCurrentPhotoPath = null;
 			}*/
 		}
 	}
-	
+
 	/*
 	private void galleryAddPic() {
 	    Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
@@ -537,8 +562,8 @@ public class EditItem extends Activity implements NoNameAlertFragment.NoticeDial
 	    mediaScanIntent.setData(contentUri);
 	    this.sendBroadcast(mediaScanIntent);
 }*/
-	
-private void saveBitmap() {
+
+	private void saveBitmap() {
 		Log.i(TAG, "saveBitmap");
 
 		/* There isn't enough memory to open up more than a couple camera photos */
@@ -568,20 +593,20 @@ private void saveBitmap() {
 
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-		
-		 /* Test compress */
-	    File imageFile = new File(mCurrentPhotoPath);
-	    try{
-	        OutputStream out = null;
-	        out = new FileOutputStream(imageFile);
-	        //Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
 
-	        bitmap.compress(Bitmap.CompressFormat.JPEG,80,out);
-	        out.flush();
-	        out.close();
-	    }catch(Exception e){
-	        Log.e("Damn","Didn't compress : "+e.toString());
-	    }
+		/* Test compress */
+		File imageFile = new File(mCurrentPhotoPath);
+		try{
+			OutputStream out = null;
+			out = new FileOutputStream(imageFile);
+			//Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+
+			bitmap.compress(Bitmap.CompressFormat.JPEG,80,out);
+			out.flush();
+			out.close();
+		}catch(Exception e){
+			Log.e("Damn","Didn't compress : "+e.toString());
+		}
 		//addBitmapToMemoryCache(mCurrentPhotoPath, bitmap);
 		//Log.d("setCache", "Number cache items = "+mMemoryCache.size());
 	}
@@ -591,8 +616,8 @@ private void saveBitmap() {
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
 		mImageView.setImageBitmap(bitmap);
 	}
-	
-/*	public void setPic(){
+
+	/*	public void setPic(){
 		final Bitmap bitmap = getBitmapFromMemCache(mCurrentPhotoPath);
 	    if (bitmap != null) {
 	    	Log.d("setPic","setting image");
@@ -602,11 +627,11 @@ private void saveBitmap() {
 	    	mImageView.setImageResource(android.R.drawable.ic_menu_gallery);
 	    	setCache();
 	    }
-		
+
 		 Associate the Bitmap to the ImageView 
 		mImageView.setImageBitmap(getBitmapFromMemCache(mCurrentPhotoPath));
 	}
-	
+
 	public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
 	    if (getBitmapFromMemCache(key) == null) {
 	    	Log.d("addBitmapToMemoryCache", "Bitmap at key is NOT in cache. Adding to cache. Items in cache before  = "+mMemoryCache.size());
@@ -614,7 +639,7 @@ private void saveBitmap() {
 	        Log.d("addBitmapToMemoryCache", "Bitmap added to cache? Items in cache after  = "+mMemoryCache.size());
 	    }
 	}
-	
+
 	public Bitmap getBitmapFromMemCache(String key) {
 	    return mMemoryCache.get(key);
 	}*/

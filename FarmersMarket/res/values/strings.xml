@@ -39,7 +39,7 @@
         <item>@drawable/ic_launcher</item>
         <item>@drawable/ic_vendor</item>
         <item>@drawable/ic_item</item>
-        <item>@drawable/ic_item</item>
+        <item>@drawable/ic_logout</item>
     </array>
     
     <!-- Content Description -->

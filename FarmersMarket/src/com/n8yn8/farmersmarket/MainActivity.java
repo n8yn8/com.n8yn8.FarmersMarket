@@ -31,6 +31,7 @@ import com.parse.ParseUser;
 public class MainActivity extends Activity {
 	
 	String TAG = "MainActivity";
+	private static final int LOG_IN=0;
 	
 	private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -128,7 +129,7 @@ public class MainActivity extends Activity {
         if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
         	Log.v(TAG, "Anonymous User detected");
         	Intent intent = new Intent(this, LoginActivity.class);
-        	startActivity(intent);
+        	startActivityForResult(intent, LOG_IN);
         	//displayView(4);
         }
         
@@ -232,7 +233,7 @@ public class MainActivity extends Activity {
         case 4:
         	ParseUser.logOut();
         	Intent intent = new Intent(this, LoginActivity.class);
-        	startActivity(intent);
+        	startActivityForResult(intent, LOG_IN);
             //fragment = new LogInFragment();
             break;
         /*case 5:
@@ -258,4 +259,12 @@ public class MainActivity extends Activity {
             Log.e("MainActivity", "Error in creating fragment");
         }
     }
+
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(TAG, "onActivityResult");
+		displayView(0);
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 }
